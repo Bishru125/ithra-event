@@ -1648,4 +1648,5 @@ input[type="file"]::file-selector-button {
     align-items: center;
     padding: 8px 10px;
     margin-bottom: 5px;
+    overflow: hidden;
 }
