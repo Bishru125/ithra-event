@@ -1413,8 +1413,6 @@ function handleTouchMove(e) {
         let newHeight = Math.max(30, startHeight * scale);
         
         // Maintain aspect ratio 300:375
-        const aspectRatio = 300/375;
-        newHeight = newWidth / aspectRatio;
         
         // Constrain within image boundaries
         newWidth = Math.min(newWidth, imgRect.width - cropBox.offsetLeft);
