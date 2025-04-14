@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/0.8.2/css/flag-icon.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+  <script src="https://unpkg.com/heic2any@0.0.3/dist/heic2any.min.js"></script>
   <title>Multi-Step Registration</title>
 </head>
 <body class="bg-clr">
@@ -231,6 +232,41 @@
                     
                   </div>
                 </div>
+
+
+
+
+
+                <!-- new -->
+
+                <div class="upload-section" id="uploadSection">
+                  <input type="file" id="imageUpload" accept="image/*">
+              </div>
+              <span data-translate="imgtext">For badge printing, please upload an image with a white background that clearly shows your head and shoulders</span>
+              
+              <div class="image-workspace" id="imageWorkspace">
+                  <img id="imagePreview" alt="Preview">
+                  <div id="cropBox">
+                      <div class="crop-handle handle-tl"></div>
+                      <div class="crop-handle handle-tr"></div>
+                      <div class="crop-handle handle-bl"></div>
+                      <div class="crop-handle handle-br"></div>
+                  </div>
+              </div>
+              
+              <div id="buttonGroup">
+                  <button id="cropButton">Crop Image</button>
+              </div>
+              
+              <div class="save-button-container" id="saveButtonContainer">
+                  <a id="downloadLink" download="cropped-image.png">
+                      <button id="saveButton">Save Image</button>
+                  </a>
+                  <button  id="newImageButton" style="margin-left: 10px; background-color: #6c757d;">Upload New Image</button>
+              </div>
+
+
+                <!-- new -->
                 
                 <div class="btn-align">
                   <button type="button" class="button2 next-step" data-translate="next">Next</button>
@@ -622,6 +658,7 @@
   <script src="https://unpkg.com/vue@2.7.13/dist/vue.min.js"></script>
   <script src="https://unpkg.com/vue-select@2.6.4/dist/vue-select.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+  
 
   <!-- Translation and Language Switch Script -->
   <script>
@@ -899,79 +936,6 @@
     }
   </script>
 
-  <!-- Image Upload & Cropper Script -->
-  <script>
-    let cropper;
-    document.getElementById('upload-btn').addEventListener('click', () => {
-        document.getElementById('profile-pic').click();
-    });
-    
-    document.getElementById('profile-pic').addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                const image = document.getElementById('image-to-crop');
-                image.src = event.target.result;
-                const cropModal = new bootstrap.Modal(document.getElementById('cropModal'));
-                cropModal.show();
-                
-                if (cropper) cropper.destroy();
-                
-                cropper = new Cropper(image, {
-                    aspectRatio: 1,
-                    viewMode: 2,
-                    dragMode: 'move',
-                    autoCropArea: 0.65,
-                    restore: false,
-                    guides: true,
-                    center: true,
-                    highlight: false,
-                    cropBoxMovable: true,
-                    cropBoxResizable: true,
-                    toggleDragModeOnDblclick: false,
-                    minContainerWidth: 300,
-                    minContainerHeight: 300,
-                    minCropBoxWidth: 150,
-                    minCropBoxHeight: 150,
-                    ready: function() {
-                        this.cropper.setCropBoxData({
-                            width: 200,
-                            height: 200
-                        });
-                    }
-                });
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-    
-    document.getElementById('crop-btn').addEventListener('click', () => {
-        if (!cropper) return;
-        
-        const canvas = cropper.getCroppedCanvas({
-            width: 150, // Reduced from 200
-            height: 150, // Reduced from 200
-            fillColor: '#fff',
-            imageSmoothingEnabled: true,
-            imageSmoothingQuality: 'high'
-        });
-        
-        const preview = document.getElementById('image-preview');
-        preview.src = canvas.toDataURL('image/jpeg', 0.8); // Added compression
-        preview.style.display = 'block';
-        preview.style.width = '150px'; // Fixed preview size
-        preview.style.height = '150px'; // Fixed preview size
-        preview.style.objectFit = 'cover'; // Ensures image covers the area
-        
-        document.getElementById('upload-success').style.display = 'block';
-        document.getElementById('remove-btn').style.display = 'inline-block';
-        document.getElementById('upload-btn').style.display = 'none';
-        
-        bootstrap.Modal.getInstance(document.getElementById('cropModal')).hide();
-        cropper.destroy();
-    });
-    </script>
 
   <!-- International Telephone Input Script -->
   <script>
@@ -1116,6 +1080,266 @@
       });
   });
   </script>
+
+
+
+
+<!-- newww -->
+
+
+
+<script>
+  // DOM Elements
+  const uploadSection = document.getElementById('uploadSection');
+  const imageUpload = document.getElementById('imageUpload');
+  const imageWorkspace = document.getElementById('imageWorkspace');
+  const imagePreview = document.getElementById('imagePreview');
+  const cropBox = document.getElementById('cropBox');
+  const cropButton = document.getElementById('cropButton');
+  const saveButtonContainer = document.getElementById('saveButtonContainer');
+  const downloadLink = document.getElementById('downloadLink');
+  const newImageButton = document.getElementById('newImageButton');
+  
+  // Variables for image data
+  let originalImage = null;
+  
+  // Variables for drag and resize functionality
+  let isDragging = false;
+  let isResizing = false;
+  let activeHandle = null;
+  let startX, startY, startLeft, startTop, startWidth, startHeight;
+  
+  // Event Listeners
+  imageUpload.addEventListener('change', handleImageUpload);
+  cropButton.addEventListener('click', cropImage);
+  newImageButton.addEventListener('click', resetToUpload);
+  
+  // Crop box interaction events
+  cropBox.addEventListener('mousedown', startDragOrResize);
+  document.addEventListener('mousemove', moveOrResize);
+  document.addEventListener('mouseup', stopDragOrResize);
+  
+  // Set up resize handle events
+  const handles = cropBox.querySelectorAll('.crop-handle');
+  handles.forEach(handle => {
+      handle.addEventListener('mousedown', function(e) {
+          e.stopPropagation(); // Prevent dragging event on the crop box
+          isResizing = true;
+          activeHandle = this;
+          
+          startX = e.clientX;
+          startY = e.clientY;
+          startWidth = cropBox.offsetWidth;
+          startHeight = cropBox.offsetHeight;
+          startLeft = cropBox.offsetLeft;
+          startTop = cropBox.offsetTop;
+      });
+  });
+  
+  // Functions
+  function handleImageUpload(e) {
+      const file = e.target.files[0];
+      if (!file || !file.type.startsWith('image/')) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(event) {
+          // Create image to get natural dimensions
+          originalImage = new Image();
+          originalImage.onload = function() {
+              // Show the image workspace
+              imagePreview.src = event.target.result;
+              imageWorkspace.style.display = 'block';
+              
+              // Show crop button
+              cropButton.style.display = 'block';
+              
+              // Hide save button if previously shown
+              saveButtonContainer.style.display = 'none';
+              
+              // Setup initial crop area
+              setTimeout(initCropBox, 100);
+          };
+          originalImage.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+  }
+  
+  function initCropBox() {
+      const imgWidth = imagePreview.offsetWidth;
+      const imgHeight = imagePreview.offsetHeight;
+      
+      // Default crop area - 80% of image size, centered
+      const cropWidth = imgWidth * 0.8;
+      const cropHeight = imgHeight * 0.8;
+      const cropLeft = (imgWidth - cropWidth) / 2;
+      const cropTop = (imgHeight - cropHeight) / 2;
+      
+      cropBox.style.width = cropWidth + 'px';
+      cropBox.style.height = cropHeight + 'px';
+      cropBox.style.left = cropLeft + 'px';
+      cropBox.style.top = cropTop + 'px';
+  }
+  
+  function startDragOrResize(e) {
+      if (isResizing) return;
+      
+      isDragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      startLeft = cropBox.offsetLeft;
+      startTop = cropBox.offsetTop;
+  }
+  
+  function moveOrResize(e) {
+      if (!isDragging && !isResizing) return;
+      
+      const imgRect = imagePreview.getBoundingClientRect();
+      
+      if (isDragging) {
+          // Calculate new position
+          let newLeft = startLeft + (e.clientX - startX);
+          let newTop = startTop + (e.clientY - startY);
+          
+          // Constrain within image boundaries
+          newLeft = Math.max(0, Math.min(newLeft, imgRect.width - cropBox.offsetWidth));
+          newTop = Math.max(0, Math.min(newTop, imgRect.height - cropBox.offsetHeight));
+          
+          // Update position
+          cropBox.style.left = newLeft + 'px';
+          cropBox.style.top = newTop + 'px';
+      } else if (isResizing) {
+          // Different resize calculations based on which handle is active
+          let newWidth, newHeight, newLeft, newTop;
+          
+          if (activeHandle.classList.contains('handle-br')) {
+              // Bottom-right handle
+              newWidth = startWidth + (e.clientX - startX);
+              newHeight = startHeight + (e.clientY - startY);
+              newLeft = startLeft;
+              newTop = startTop;
+          } else if (activeHandle.classList.contains('handle-bl')) {
+              // Bottom-left handle
+              newWidth = startWidth - (e.clientX - startX);
+              newHeight = startHeight + (e.clientY - startY);
+              newLeft = startLeft + (e.clientX - startX);
+              newTop = startTop;
+          } else if (activeHandle.classList.contains('handle-tr')) {
+              // Top-right handle
+              newWidth = startWidth + (e.clientX - startX);
+              newHeight = startHeight - (e.clientY - startY);
+              newLeft = startLeft;
+              newTop = startTop + (e.clientY - startY);
+          } else if (activeHandle.classList.contains('handle-tl')) {
+              // Top-left handle
+              newWidth = startWidth - (e.clientX - startX);
+              newHeight = startHeight - (e.clientY - startY);
+              newLeft = startLeft + (e.clientX - startX);
+              newTop = startTop + (e.clientY - startY);
+          }
+          
+          // Ensure minimum size (30x30 pixels)
+          newWidth = Math.max(30, newWidth);
+          newHeight = Math.max(30, newHeight);
+          
+          // Constrain within image boundaries
+          if (newLeft < 0) {
+              newWidth += newLeft;
+              newLeft = 0;
+          }
+          
+          if (newTop < 0) {
+              newHeight += newTop;
+              newTop = 0;
+          }
+          
+          if (newLeft + newWidth > imgRect.width) {
+              newWidth = imgRect.width - newLeft;
+          }
+          
+          if (newTop + newHeight > imgRect.height) {
+              newHeight = imgRect.height - newTop;
+          }
+          
+          // Update crop box dimensions and position
+          cropBox.style.width = newWidth + 'px';
+          cropBox.style.height = newHeight + 'px';
+          cropBox.style.left = newLeft + 'px';
+          cropBox.style.top = newTop + 'px';
+      }
+  }
+  
+  function stopDragOrResize() {
+      isDragging = false;
+      isResizing = false;
+      activeHandle = null;
+  }
+  
+  function cropImage() {
+      // Create canvas for cropping
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      
+      // Calculate scaling factor between displayed image and original
+      const displayedWidth = imagePreview.offsetWidth;
+      const displayedHeight = imagePreview.offsetHeight;
+      const scaleX = originalImage.naturalWidth / displayedWidth;
+      const scaleY = originalImage.naturalHeight / displayedHeight;
+      
+      // Get crop dimensions
+      const cropLeft = parseFloat(cropBox.style.left) || 0;
+      const cropTop = parseFloat(cropBox.style.top) || 0;
+      const cropBoxWidth = cropBox.offsetWidth;
+      const cropBoxHeight = cropBox.offsetHeight;
+      
+      // Calculate cropped dimensions in original image coordinates
+      const realCropX = cropLeft * scaleX;
+      const realCropY = cropTop * scaleY;
+      const realCropWidth = cropBoxWidth * scaleX;
+      const realCropHeight = cropBoxHeight * scaleY;
+      
+      // Set canvas to the cropped size
+      canvas.width = realCropWidth;
+      canvas.height = realCropHeight;
+      
+      // Draw only the cropped portion to the canvas
+      ctx.drawImage(
+          originalImage,
+          realCropX, realCropY, realCropWidth, realCropHeight,
+          0, 0, realCropWidth, realCropHeight
+      );
+      
+      // Convert to data URL and set download link
+      const croppedImageData = canvas.toDataURL('image/png');
+      downloadLink.href = croppedImageData;
+      
+      // Hide the image workspace and crop button
+      imageWorkspace.style.display = 'none';
+      cropButton.style.display = 'none';
+      
+      // Show just the save button
+      saveButtonContainer.style.display = 'block';
+  }
+  
+  function resetToUpload() {
+      // Reset UI state to initial
+      imageWorkspace.style.display = 'none';
+      cropButton.style.display = 'none';
+      saveButtonContainer.style.display = 'none';
+      
+      // Reset image upload input
+      imageUpload.value = '';
+      
+      // Reset crop box properties
+      cropBox.style.width = '0px';
+      cropBox.style.height = '0px';
+      cropBox.style.left = '0px';
+      cropBox.style.top = '0px';
+      
+      // Clear image references and src
+      imagePreview.src = '';
+      originalImage = null;
+  }
+</script>
   
 </body>
 </html>
