@@ -1,0 +1,18 @@
+@font-face {
+    font-family: 'ithra';
+    src: url('ithra-medium.woff2') format('woff2'),
+        url('ithra-medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'ithraV2';
+    src: url('ithraV2-medium.woff2') format('woff2'),
+        url('ithraV2-medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+

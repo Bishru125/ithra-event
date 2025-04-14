@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="use.fontawesome.com/releases/v5.15.4/css/all.html" />
+  <link rel="stylesheet" href="assets/css/animate.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="fonts/webfont/stylesheet.css">
+  <link rel="stylesheet" href="assets/css/mobile.css">
+  <link rel="stylesheet" href="assets/bootstarp/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/fonts/webfont/stylesheet.css">
+  <link rel="stylesheet" href="assets/css/super-classes.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/0.8.2/css/flag-icon.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+  <title>Multi-Step Registration</title>
+</head>
+<body class="bg-clr">
+
+  <!-- Navbar -->
+  <div class="navbar-custom">
+    <a class="navbar-brand d-flex align-items-center" href="https://www.ithra.com/en/visit-ithra/attractions/cinema/saudi-film-festival-11"  target="_blank"> 
+      <img src="assets/images/logo-main.png" class="img-fluid nav-main-logo" alt="Main Logo">
+    </a>
+    <a href="https://www.ithra.com/"  target="_blank">
+      <img src="assets/images/logo-2.png" class="img-fluid nav-main-logo" alt="Secondary Logo">
+    </a>
+  </div>
+
+  <!-- Main Section (Wizard Form) -->
+  <section class="conference-main-sec w-100 float-left padding-top padding-bottom position-relative">
+    <div class="custom-container">
+      <div class="generic-title wow bounceInUp" data-wow-duration="3s">
+        <!-- Optional title content -->
+      </div>
+      <section class="main-container">
+        <div class="container">
+
+          <!-- Language Switch -->
+          <div class="progress-switch">
+            <div class="form-progress-bar justify-content-end">
+              <div class="switch">
+                <a href="#" class="active d-flex align-items-center" onclick="switchLanguage(event, 'en')">
+                  <i class="flag-icon flag-icon-us me-1"></i>
+                </a>
+                <a href="#" class="d-flex align-items-center" onclick="switchLanguage(event, 'ar')">
+                  <i class="flag-icon flag-icon-sa me-1"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="form-progress-bar">
+            <span></span>
+            <span></span>
+          </div>
+
+          <!-- Form Container -->
+          <div class="form-container">
+            <!-- Single Wizard Form -->
+            <form id="survey-form">
+            
+              <!-- Step 1: Image Update-->
+              <div class="form-step active">
+                <div class="form-title">
+                  <h4 class="mb-4" data-translate="personalInfo">Update Profile Pic</h4>
+                </div>
+                <!-- Image Upload -->
+                <div class="form-group">
+                  <div class="image-upload-container">
+                    <label data-translate="incertimg" for="profile-pic">Insert Image: *</label>
+                    <input type="file" class="form-control" id="profile-pic" accept="image/*" required>
+                    <span data-translate="imgtext">
+                      For badge printing, please upload an image with a white background that clearly shows your head and shoulders
+                    </span>
+                    <button class="btn btn-outline-secondary" id="upload-btn" type="button">Choose Image</button>
+                    <div class="image-preview-container">
+                      <img id="image-preview" class="image-preview img-thumbnail" style="display:none; max-width:200px;" alt="Preview">
+                    </div>
+                    <div class="upload-success mt-2 text-success" id="upload-success" style="display:none;">
+                      <i class="fas fa-check-circle"></i> Image uploaded successfully
+                    </div>
+                    <button class="btn btn-danger mt-2" id="remove-btn" type="button" style="display:none;">Remove Image</button>
+                    <!-- Error span will be created by JS if needed -->
+                  </div>
+                </div>
+                
+                <div class="btn-align">
+                  <button type="button" class="button2 next-step" data-translate="next">Submit</button>
+                </div>
+              </div>
+
+              <!-- Step 2: Thank You -->
+              <div class="form-step">
+                <div class="thank-you-section text-center">
+                  <h3 style="font-weight: bold; color: green;" data-translate="thankyou">
+                    <i class="fas fa-check-circle"></i> Thank You
+                  </h3>
+                  <p style="color: black;">for your update</p>
+                </div>
+              </div>
+
+            </form>
+            <!-- End Wizard Form -->
+          </div>
+          
+          <!-- Ticket Name Section -->
+          <div class="ticket-name">
+            <h3 data-translate="production2">Image update</h3>
+          </div>
+
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <section class="footer-main-sec w-100 float-left">
+    <div class="container">
+      <div class="footer-inner-sec pos-rel">
+        <div class="footer-social-sec footer-text">
+          <div>
+            <span class="text-white d-inline-block" data-translate="copyright">
+              2025 Saudi Arabian Oil Co. King Abdulaziz Center for World Culture
+            </span>
+          </div>
+          <div class="text-white foot-link">
+            <a href="https://www.ithra.com/ar/terms-conditions">
+              <span data-translate="terms">Terms and Conditions</span>
+            </a>
+            <a href="https://www.ithra.com/ar/privacy-policy">
+              <span data-translate="privacy">Privacy Policy</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Crop Modal -->
+  <div class="modal fade" id="cropModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">x</button>
+        </div>
+        <div class="modal-body text-center">
+          <img id="image-to-crop" src="" style="max-width: 100%;" alt="To Crop">
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary" id="crop-btn">Crop</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/form-js/jquery-3.6.0.min.js"></script>
+  <script src="assets/js/ScrollTrigger.min.js"></script>
+  <script src="assets/js/script-1.js"></script>
+  <script src="assets/f/bootstrap.min.js"></script>
+  <script src="assets/form-js/bootstrap.bundle.min.js"></script>
+  <script src="https://kit.fontawesome.com/49ccdaea81.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput-jquery.min.js"></script>
+  <script src="https://unpkg.com/vue@2.7.13/dist/vue.min.js"></script>
+  <script src="https://unpkg.com/vue-select@2.6.4/dist/vue-select.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+  <!-- Translation and Language Switch Script -->
+  <script>
+    // Translations object with acknowledgment keys included
+    const translations = {
+      en: {
+
+        terms: "Terms and Conditions",
+        privacy: "Privacy Policy",
+        submit: "Submit",
+        incertimg: "Insert Image:",
+        verify: "Verify",
+        imgtext: "For badge printing, please upload an image with a white background that clearly shows your head and shoulders",
+        enterFullName1: "(As it shoudl appear on your badge)",
+        email1: "(For official communication)",
+        afli: "Company/ Affiliation",
+        thankyou: "Thank You"
+      },
+      ar: {
+
+        terms: "الشروط و الأحكام",
+        privacy: "سياسة الخصوصية",
+        submit: "إرسال",
+        incertimg: "أرفق صورة: *",
+        verify: "إرسال",
+        imgtext: "لطباعة الشارة بشكل صحيح، تأكد من رفع صورتك بخلفية بيضاء تظهر فيها ملامح الوجه والكتفين",
+        enterFullName1: "(كما يجب أن يظهر على شارتك)",
+        email1: "(للتواصل الرسمي)",
+        afli: "الشركة/الانتساب",
+        thankyou: "شكراً"
+      }
+    };
+
+    // Language switch function accepting event and language code
+    function switchLanguage(event, lang) {
+      event.preventDefault();
+      document.querySelectorAll('.switch a').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.currentTarget.classList.add('active');
+      document.body.style.direction = lang === 'ar' ? 'rtl' : 'ltr';
+      const elements = document.querySelectorAll('[data-translate]');
+      elements.forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (translations[lang] && translations[lang][key]) {
+          element.textContent = translations[lang][key];
+        }
+      });
+      const inputs = document.querySelectorAll('[data-placeholder]');
+      inputs.forEach(input => {
+        const key = input.getAttribute('data-placeholder');
+        if (translations[lang] && translations[lang][key]) {
+          input.placeholder = translations[lang][key];
+        }
+      });
+    }
+  </script>
+
+
+
+  <!-- Wizard Step Navigation -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+
+
+      const steps = document.querySelectorAll(".form-step");
+      const nextBtns = document.querySelectorAll(".next-step");
+      const prevBtns = document.querySelectorAll(".prev-step");
+      const progressSpans = document.querySelectorAll(".form-progress-bar span");
+      let currentStep = 0;
+  
+      function showStep(index) {
+        steps.forEach((step, i) => {
+          step.classList.toggle("active", i === index);
+          if (progressSpans[i]) {
+            if (i <= index) {
+              progressSpans[i].classList.add("bar-color");
+            } else {
+              progressSpans[i].classList.remove("bar-color");
+            }
+          }
+        });
+      }
+
+      // Use the closest .form-group container to manage the error message.
+      function showError(field) {
+        const container = field.closest(".form-group");
+        let errorSpan = container.querySelector("span.error");
+        if (!errorSpan) {
+          errorSpan = document.createElement("span");
+          errorSpan.className = "error";
+          errorSpan.style.color = "red";
+          errorSpan.textContent = "Required field";
+          container.appendChild(errorSpan);
+        }
+        errorSpan.style.display = "block";
+      }
+
+      function hideError(field) {
+        const container = field.closest(".form-group");
+        const errorSpan = container.querySelector("span.error");
+        if (errorSpan) {
+          errorSpan.style.display = "none";
+        }
+      }
+
+      // Validate all required inputs and selects within the current step.
+      function validateStep(stepElement) {
+        let isValid = true;
+        const requiredFields = stepElement.querySelectorAll("input[required], select[required]");
+        requiredFields.forEach(field => {
+          let fieldValid = true;
+          if (field.type === "checkbox") {
+            fieldValid = field.checked;
+          } else if (field.type === "file") {
+            fieldValid = field.files && field.files.length > 0;
+          } else if (field.tagName.toLowerCase() === "select") {
+            fieldValid = field.value && field.value.trim() !== "";
+          } else {
+            fieldValid = field.value && field.value.trim() !== "";
+            // For phone number field, optionally enforce a minimal length.
+            if (field.id === "mobile_code") {
+              fieldValid = fieldValid && field.value.trim().length > 3;
+            }
+          }
+          if (!fieldValid) {
+            isValid = false;
+            showError(field);
+          } else {
+            hideError(field);
+          }
+        });
+        return isValid;
+      }
+
+  
+      nextBtns.forEach(btn => {
+        btn.addEventListener("click", function () {
+          const activeStep = document.querySelector(".form-step.active");
+          if (!validateStep(activeStep)) {
+            return; // Prevent moving forward if validation fails
+          }
+          if (currentStep < steps.length - 1) {
+            currentStep++;
+            // Optionally update preview on a specific step (e.g., step 4)
+            if (typeof updatePreview === "function" && currentStep === 4) {
+              updatePreview();
+            }
+            showStep(currentStep);
+          }
+        });
+      });
+  
+      prevBtns.forEach(btn => {
+        btn.addEventListener("click", function () {
+          if (currentStep > 0) {
+            currentStep--;
+            showStep(currentStep);
+          }
+        });
+      });
+
+      showStep(currentStep);
+    });
+  </script>
+
+
+  <!-- Image Upload & Cropper Script -->
+  <script>
+    let cropper;
+    document.getElementById('upload-btn').addEventListener('click', () => {
+      document.getElementById('profile-pic').click();
+    });
+    document.getElementById('profile-pic').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const image = document.getElementById('image-to-crop');
+          image.src = event.target.result;
+          const cropModal = new bootstrap.Modal(document.getElementById('cropModal'));
+          cropModal.show();
+          if (cropper) cropper.destroy();
+          cropper = new Cropper(image, {
+            aspectRatio: 1,
+            viewMode: 1,
+            autoCropArea: 0.8,
+            responsive: true,
+            guides: false
+          });
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+    document.getElementById('crop-btn').addEventListener('click', () => {
+      if (!cropper) return;
+      const canvas = cropper.getCroppedCanvas({
+        width: 200,
+        height: 200,
+        fillColor: '#fff',
+        imageSmoothingEnabled: true,
+        imageSmoothingQuality: 'high'
+      });
+      const preview = document.getElementById('image-preview');
+      preview.src = canvas.toDataURL('image/jpeg');
+      preview.style.display = 'block';
+      document.getElementById('upload-success').style.display = 'block';
+      document.getElementById('remove-btn').style.display = 'inline-block';
+      document.getElementById('upload-btn').style.display = 'none';
+      bootstrap.Modal.getInstance(document.getElementById('cropModal')).hide();
+      cropper.destroy();
+    });
+    document.getElementById('remove-btn').addEventListener('click', () => {
+      document.getElementById('image-preview').src = '';
+      document.getElementById('image-preview').style.display = 'none';
+      document.getElementById('upload-success').style.display = 'none';
+      document.getElementById('remove-btn').style.display = 'none';
+      document.getElementById('upload-btn').style.display = 'inline-block';
+      document.getElementById('profile-pic').value = '';
+    });
+  </script>
+
+
+
+  <!-- WOW.js Initialization -->
+  <script>
+    new WOW().init();
+  </script>
+  
+</body>
+</html>

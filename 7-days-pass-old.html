@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="use.fontawesome.com/releases/v5.15.4/css/all.html" />
+  <link rel="stylesheet" href="assets/css/animate.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="fonts/webfont/stylesheet.css">
+  <link rel="stylesheet" href="assets/css/mobile.css">
+  <link rel="stylesheet" href="assets/bootstarp/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/fonts/webfont/stylesheet.css">
+  <link rel="stylesheet" href="assets/css/super-classes.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/0.8.2/css/flag-icon.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+  <title>Multi-Step Registration</title>
+</head>
+<body class="bg-clr">
+
+  <!-- Navbar -->
+  <div class="navbar-custom">
+    <a class="navbar-brand d-flex align-items-center" href="https://www.ithra.com/en/visit-ithra/attractions/cinema/saudi-film-festival-11"  target="_blank"> 
+      <img src="assets/images/logo-main.png" class="img-fluid nav-main-logo" alt="Main Logo">
+    </a>
+    <a href="https://www.ithra.com/"  target="_blank">
+      <img src="assets/images/logo-2.png" class="img-fluid nav-main-logo" alt="Secondary Logo">
+    </a>
+  </div>
+
+  <!-- Main Section (Wizard Form) -->
+  <section class="conference-main-sec w-100 float-left position-relative">
+    <div class="custom-container">
+      <div class="generic-title wow bounceInUp" data-wow-duration="3s">
+        <!-- Optional title content -->
+      </div>
+      <section class="main-container">
+        <div class="container">
+
+          <!-- Language Switch -->
+          <div class="progress-switch">
+            <div class="form-progress-bar justify-content-end">
+              <div class="switch">
+                <a href="#" class="active d-flex align-items-center" onclick="switchLanguage(event, 'en')">
+                  <i class="flag-icon flag-icon-gb me-1"></i>
+                </a>
+                <a href="#" class="d-flex align-items-center" onclick="switchLanguage(event, 'ar')">
+                  <i class="flag-icon flag-icon-sa me-1"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="form-progress-bar">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+          <!-- Form Container -->
+          <div class="form-container">
+            <!-- Single Wizard Form -->
+            <form id="survey-form">
+              
+              <!-- Step 1: Email & OTP -->
+              <div class="form-step active">
+                <!-- Email Step -->
+                <div id="email-step">
+                  <img src="assets/images/email-icon.svg" alt="" class="mail-icon">
+                  <div class="form-title pb-4">
+                    <h4 class="text-center" data-translate="footmail">Enter your email to start</h4>
+                  </div>
+                  <div class="form-group">
+                    <input type="email" name="email" id="email" class="form-control" required>
+                  </div>
+                  <div class="d-flex justify-content-center mt-5">
+                    <button type="button" class="button2" id="continue-btn" data-translate="NextBtn">Next</button>
+                  </div>
+                </div>
+                <!-- OTP Step (initially hidden) -->
+                <div id="otp-step" style="display: none;">
+                  <div class="form-title">
+                    <h4 class="text-center" data-translate="verification">Enter your verification code</h4>
+                    <h6 data-translate="spam">Check your spam folder too</h6>
+                  </div>
+                  <div class="form-group">
+                    <div class="container height-100 d-flex justify-content-center align-items-center">
+                      <div class="position-relative">
+                        <div class="p-2 text-center">
+                          <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2">
+                            <input class="m-2 text-center form-control rounded" type="text" id="first" maxlength="1" />
+                            <input class="m-2 text-center form-control rounded" type="text" id="second" maxlength="1" />
+                            <input class="m-2 text-center form-control rounded" type="text" id="third" maxlength="1" />
+                            <input class="m-2 text-center form-control rounded" type="text" id="fourth" maxlength="1" />
+                          </div>
+                          <div id="otp-resend-container" style="display: inline-flex; align-items: center;">
+                            <span id="timer-display" style="font-size: 1.2em;">01:00</span>
+                            <a href="#" data-translate="ResendNew" id="resend-link" style="margin-left: 10px; pointer-events: none; color: grey; text-decoration: none;">Resend</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- OTP Next Button moves to the next overall step -->
+                  <div class="row mt-4">
+                    <div class="col-md-12">
+                      <div class="d-flex justify-content-center">
+                        <button type="button" class="button2 next-step" data-translate="verify">Verify</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Step 2: Personal Information -->
+              <div class="form-step">
+                <div class="form-title">
+                  <h4 class="mb-4" data-translate="personalInfo">Personal Information</h4>
+                </div>
+                <div class="form-group">
+                  <label data-translate="fullName" for="full_name">Full Name: <span>*</span></label>
+                  <input type="text" name="text" id="full_name" placeholder="(As it should appear on your badge)" data-placeholder="enterFullName1" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label data-translate="ageGroup" for="age_group">Age Group: <span>*</span></label>
+                  <select class="form-control" id="age_group">
+                    <option style="display: none;" data-translate="select"> </option>
+                    <option data-translate="ageold">45+</option>
+                    <option>31 - 45</option>
+                    <option>23 - 30</option>
+                    <option>18 - 22</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label data-translate="emailAddress" for="personal_email">Email Address <span>*</span></label>
+                  <input type="text" name="email" id="personal_email" data-placeholder="officialCommunicate" placeholder="(For official communication)" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label data-translate="phoneNumber" for="mobile_code">Phone Number <span>*</span></label>
+                  <input type="hidden" value="+966" name="country_code" id="country_code" />
+                  <input type="hidden" value="sa" name="country_initial" id="country_initial" />
+                  <input type="text" name="mobile" id="mobile_code" class="form-control phone-form" onkeypress="return /[0-9]/i.test(event.key)" required>
+                  <span class="error mobile_error" style="color: red"></span>
+                </div>
+                <!-- Image Upload -->
+                <div class="form-group">
+                  <div class="image-upload-container">
+                    <label data-translate="incertimg" for="profile-pic">Insert Image <span>*</span></label>
+                    <input data-placeholder="filechoosen" type="file" class="form-control" id="profile-pic" accept="image/*">
+                    <button class="btn btn-outline-secondary" id="upload-btn">Choose Image</button>
+                    <div class="image-preview-container">
+                      <img id="image-preview" class="image-preview img-thumbnail" style="display:none; max-width:200px;" alt="Preview">
+                    </div>
+                    <div class="upload-success mt-2 text-success" id="upload-success" style="display:none;">
+                      <i class="fas fa-check-circle"></i> Image uploaded successfully
+                    </div>
+                    <button class="btn btn-danger mt-2" id="remove-btn" style="display:none;">Remove Image</button>
+                  </div>
+                </div>
+                
+                <div class="btn-align">
+                  <button type="button" class="button2 next-step" data-translate="NextBtn">Next</button>
+                </div>
+              </div>
+
+              <!-- Step 3: Accreditation Details -->
+              <div class="form-step">
+                <div class="form-title">
+                  <h4 class="mb-4" data-translate="Accreditationdetails">Accreditation Details</h4>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label data-translate="previousyears" for="attended_festival">Have you attended the Saudi Film Festival in previous years?</label>
+                      <select class="form-control" id="attended_festival">
+                        <option style="display: none;" data-translate="select">Select </option>
+                        <option value="Yes" data-translate="yes">Yes</option>
+                        <option value="No" data-translate="no">No</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 d-flex align-items-end">
+                    <div class="form-group">
+                      <label data-translate="whichyears" for="festival_years">If Yes: (Please specify which years)</label>
+                      <input type="text" name="text" id="festival_years" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                
+               
+                <div class="form-group">
+                  <label data-translate="afli" for="company_affiliation">Company/ Affiliation:</label>
+                  <input type="text" name="text" id="company_affiliation" data-placeholder="ifapplicable" placeholder="If applicable" class="form-control">
+                </div>
+                <!-- Areas of Interest Checkboxes -->
+                <div class="aria-check-section">
+                  <h6 data-translate="checktitle">Select your areas of interest: (Check all that apply)</h6>
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="aria-check-box">
+                        <input type="checkbox" id="films_in_competition" name="interest_films" value="Films in Competition">
+                        <label for="films_in_competition" data-translate="filmsinCompetition">Films in Competition</label>
+                      </div>
+                      <div class="aria-check-box">
+                        <input type="checkbox" id="cinema_identity_screenings" name="interest_cinema" value="Cinema of Identity Screenings">
+                        <label for="cinema_identity_screenings" data-translate="cinemaofIdentityScreenings">Cinema of Identity Screenings</label>
+                      </div>
+                      <div class="aria-check-box">
+                        <input type="checkbox" id="immersive_interactive" name="interest_immersive" value="Immersive/Interactive Experiences">
+                        <label for="immersive_interactive" data-translate="immersiveInteractiveExperiences">Immersive/Interactive Experiences</label>
+                      </div>
+                    </div>
+                    <div class="col-sm-12">
+                      <div class="aria-check-box">
+                        <input type="checkbox" id="japanese_film" name="interest_japanese" value="Japanese Film Screenings">
+                        <label for="japanese_film" data-translate="japaneseFilmScreenings">Japanese Film Screenings</label>
+                      </div>
+                      <div class="aria-check-box">
+                        <input type="checkbox" id="red_carpet" name="interest_red_carpet" value="Red Carpet">
+                        <label for="red_carpet" data-translate="redCarpet">Red Carpet (Meet &amp; Greet Opportunities)</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="btn-align">
+                  <button type="button" class="button2 prev-step" data-translate="back">Back</button>
+                  <button type="button" class="button2 next-step" data-translate="next">Next</button>
+                </div>
+              </div>
+
+              <!-- Step 4: Acknowledgment Step -->
+              <div class="form-step">
+                <div class="form-title">
+                  <h4 data-translate="acknowledgment">Acknowledgment</h4>
+                </div>
+                <div class="form-group">
+                  <p data-translate="acknowledgmentPara">
+                    By submitting this form, I confirm that the information provided is accurate and agree to follow the festival’s code of conduct.
+                  </p>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="acknowledgment" required>
+                    <label class="form-check-label" for="acknowledgment" data-translate="agree">I Agree</label>
+                  </div>
+                </div>
+                <div class="btn-align">
+                  <button type="button" class="button2 prev-step" data-translate="back">Back</button>
+                  <button type="button" class="button2 next-step" data-translate="next">Next</button>
+                </div>
+              </div>
+
+              <!-- Step 5: Preview -->
+              <div class="form-step">
+                <div class="all-info-header">
+                  <img src="assets/images/ticket-icon.png" alt="">
+                  <h4></h4>
+                </div>
+                <div class="all-info-cont-head">
+                  <h5 data-translate="personalInfo">Personal Information</h5>
+                </div>
+                <div class="all-info-content">
+                  <ul class="p-0">
+                    <li data-translate="fullName2">Full Name:</li>
+                    <li class="info-data" id="preview_full_name"></li>
+                  </ul>
+                  <ul class="p-0">
+                    <li data-translate="ageGroup2">Age Group:</li>
+                    <li class="info-data" id="preview_age_group"></li>
+                  </ul>
+                  <ul class="p-0">
+                    <li data-translate="emailAddress2">Email Address:</li>
+                    <li class="info-data" id="preview_email"></li>
+                  </ul>
+                  <ul class="p-0">
+                    <li data-translate="phoneNumber2">Phone Number:</li>
+                    <li class="info-data" id="preview_phone"></li>
+                  </ul>
+                  <ul class="p-0">
+                    <li data-translate="insertImage2">Insert Image:</li>
+                    <li class="info-data">
+                      <img id="preview_image" src="" alt="Preview Image" style="max-width:200px;">
+                    </li>
+                  </ul>
+                  <ul class="p-0">
+                    <li data-translate="haveyouattended">Have you attended the Saudi Film Festival in previous years?</li>
+                    <li class="info-data" id="preview_attended"></li>
+                  </ul>
+                  <ul class="p-0">
+                    <li data-translate="ifyes">If yes: (Please specify which years)</li>
+                    <li class="info-data" id="preview_festival_years"></li>
+                  </ul>
+                </div>
+                <div class="all-info-cont-head">
+                  <h5>Accreditation Details</h5>
+                </div>
+                <div class="all-info-content">
+                  <ul class="p-0">
+                    <li data-translate="filmsinCompetition">Films in Competition</li>
+                    <li class="info-data" id="preview_films_in_competition"></li>
+                  </ul>
+                  <ul class="p-0">
+                    <li data-translate="japaneseFilmScreenings">Japanese Film Screenings</li>
+                    <li class="info-data" id="preview_japanese_film"></li>
+                  </ul>
+                  <ul class="p-0">
+                    <li data-translate="cinemaofIdentityScreenings">Cinema of Identity Screenings</li>
+                    <li class="info-data" id="preview_cinema_identity_screenings"></li>
+                  </ul>
+                  <ul class="p-0">
+                    <li data-translate="redCarpet">Red Carpet (Meet &amp; Greet Opportunities)</li>
+                    <li class="info-data" id="preview_red_carpet"></li>
+                  </ul>
+                  <ul class="p-0">
+                    <li data-translate="immersiveInteractiveExperiences">Immersive/Interactive Experiences</li>
+                    <li class="info-data" id="preview_immersive_interactive"></li>
+                  </ul>
+                  <ul class="p-0">
+                    <li data-translate="Companyaffiliation">Company Affiliation</li>
+                    <li class="info-data" id="preview_company"></li>
+                  </ul>
+                  <ul class="p-0">
+                    <li>Acknowledgment:</li>
+                    <li class="info-data" id="preview_acknowledgment"></li>
+                  </ul>
+                </div>
+                
+                <div class="btn-align">
+                  <button type="button" class="button2 prev-step" data-translate="back">Back</button>
+                  <button type="button" class="button2 next-step" data-translate="next">Submit</button>
+                </div>
+              </div>
+
+              <!-- Step 6: Thank You -->
+              <div class="form-step">
+                <div class="thank-you-section text-center">
+                  <h3 style="font-weight: bold; color: green;">
+                    <i class="fas fa-check-circle"></i> Thank You
+                  </h3>
+                  <p style="color: black;">Your registration is completed</p>
+                </div>
+              </div>
+
+            </form>
+            <!-- End Wizard Form -->
+          </div>
+          
+          <!-- Ticket Name Section -->
+          <div class="ticket-name">
+            <h3 data-translate="production2">7 Day Film Screening Pass</h3>
+          </div>
+
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <section class="footer-main-sec w-100 float-left">
+    <div class="container">
+      <div class="footer-inner-sec pos-rel">
+        <div class="footer-social-sec footer-text">
+          <div>
+            <span class="text-white d-inline-block" data-translate="copyright">
+              © 2025 Saudi Arabian Oil Co. King Abdulaziz Center for World Culture
+            </span>
+          </div>
+          <div class="text-white foot-link">
+            <a target="_blank" href="https://www.ithra.com/en/terms-conditions">
+              <span data-translate="terms">Terms and Conditions</span>
+            </a>
+            <a target="_blank" href="https://www.ithra.com/en/privacy-policy">
+              <span data-translate="privacy">Privacy Policy</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Crop Modal -->
+  <div class="modal fade" id="cropModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">x</button>
+        </div>
+        <div class="modal-body text-center">
+          <img id="image-to-crop" src="" style="max-width: 100%;" alt="To Crop">
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary" id="crop-btn">Crop</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="assets/js/script.js"></script>
+  <script src="assets/form-js/jquery-3.6.0.min.js"></script>
+  <script src="assets/js/ScrollTrigger.min.js"></script>
+  <script src="assets/js/script-1.js"></script>
+  <script src="assets/f/bootstrap.min.js"></script>
+  <script src="assets/form-js/bootstrap.bundle.min.js"></script>
+  <script src="https://kit.fontawesome.com/49ccdaea81.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput-jquery.min.js"></script>
+  <script src="https://unpkg.com/vue@2.7.13/dist/vue.min.js"></script>
+  <script src="https://unpkg.com/vue-select@2.6.4/dist/vue-select.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+  <!-- Translation and Language Switch Script -->
+  <script>
+    
+  </script>
+
+  <!-- Email to OTP Handler -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('continue-btn').addEventListener('click', function () {
+        const email = document.getElementById('email').value.trim();
+        if (email) {
+          // Hide email section and show OTP section
+          document.getElementById('email-step').style.display = 'none';
+          document.getElementById('otp-step').style.display = 'block';
+        } else {
+          alert('Please enter a valid email.');
+        }
+      });
+    });
+  </script>
+
+  <!-- International Telephone Input Script -->
+  <script>
+    $('#mobile_code').intlTelInput({
+      initialCountry: 'sa',
+      separateDialCode: true,
+    });
+    $('#mobile_code').on('countrychange', function () {
+      const countryInput = $('#mobile_code');
+      const countryData = countryInput.intlTelInput('getSelectedCountryData');
+      $('#country_code').val(`+${countryData.dialCode}`);
+      $('#country_initial').val(countryData.iso2.toLowerCase());
+    });
+  </script>
+
+  <!-- WOW.js Initialization -->
+  <script>
+    new WOW().init();
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const otpInputs = document.querySelectorAll('#otp input');
+   
+      otpInputs.forEach((input, index) => {
+        // Input Event: Advance automatically when a digit is typed.
+        input.addEventListener('input', function () {
+          if (this.value.length === this.maxLength) {
+            if (index < otpInputs.length - 1) {
+              otpInputs[index + 1].focus();
+            }
+          }
+        });
+   
+        // Keydown Event: If Backspace is hit and the current input is empty, focus the previous input.
+        input.addEventListener('keydown', function (e) {
+          if (e.key === 'Backspace' && this.value === '' && index > 0) {
+            otpInputs[index - 1].focus();
+          }
+        });
+   
+        // Paste Event: Distribute pasted characters across all OTP fields.
+        input.addEventListener('paste', function(e) {
+          e.preventDefault();
+          const pastedData = e.clipboardData.getData('text');
+          // Split the pasted data into an array of characters.
+          const values = pastedData.split('');
+          // Fill each OTP input with the corresponding character.
+          otpInputs.forEach((otpInput, idx) => {
+            otpInput.value = values[idx] || '';
+          });
+          // Focus the last filled input (or the last input if more characters than needed are pasted)
+          const lastIndex = Math.min(values.length, otpInputs.length) - 1;
+          if (lastIndex >= 0) {
+            otpInputs[lastIndex].focus();
+          }
+        });
+      });
+    });
+    </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        let timer = 60;
+        const timerDisplay = document.getElementById('timer-display');
+        const resendLink = document.getElementById('resend-link');
+       
+        // Update the countdown every second
+        const countdownInterval = setInterval(function() {
+          const minutes = Math.floor(timer / 60);
+          const seconds = timer % 60;
+          timerDisplay.textContent = 
+            (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+       
+          if (timer <= 0) {
+            clearInterval(countdownInterval);
+            timerDisplay.textContent = "00:00";
+            // Activate the resend link: set color to red and allow clicking
+            resendLink.style.pointerEvents = "auto";
+            resendLink.style.color = "red";
+          }
+          timer--;
+        }, 1000);
+      });
+      </script>
+  
+</body>
+</html>

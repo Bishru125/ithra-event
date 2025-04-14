@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="use.fontawesome.com/releases/v5.15.4/css/all.html" />
+  <link rel="stylesheet" href="assets/css/animate.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="fonts/webfont/stylesheet.css">
+  <link rel="stylesheet" href="assets/css/mobile.css">
+  <link rel="stylesheet" href="assets/bootstarp/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/fonts/webfont/stylesheet.css">
+  <link rel="stylesheet" href="assets/css/super-classes.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/css/intlTelInput.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/0.8.2/css/flag-icon.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+  <title>Multi-Step Registration</title>
+</head>
+<body class="bg-clr">
+
+  <!-- Navbar -->
+  <div class="navbar-custom">
+    <a class="navbar-brand d-flex align-items-center" href="https://www.ithra.com/en/visit-ithra/attractions/cinema/saudi-film-festival-11"  target="_blank"> 
+      <img src="assets/images/logo-main.png" class="img-fluid nav-main-logo" alt="Main Logo">
+    </a>
+    <a href="https://www.ithra.com/"  target="_blank">
+      <img src="assets/images/logo-2.png" class="img-fluid nav-main-logo" alt="Secondary Logo">
+    </a>
+  </div>
+
+  <!-- Main Section (Wizard Form) -->
+  <section class="conference-main-sec w-100 float-left position-relative">
+    <div class="custom-container">
+      <div class="generic-title wow bounceInUp" data-wow-duration="3s">
+        <!-- Optional title content -->
+      </div>
+      <section class="main-container">
+        <div class="container">
+
+          <!-- Language Switch -->
+          <div class="progress-switch">
+            <div class="form-progress-bar justify-content-end">
+              <div class="switch">
+                <a href="#" class="active d-flex align-items-center" onclick="switchLanguage(event, 'en')">
+                  <i class="flag-icon flag-icon-gb me-1"></i>
+                </a>
+                <a href="#" class="d-flex align-items-center" onclick="switchLanguage(event, 'ar')">
+                  <i class="flag-icon flag-icon-sa me-1"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="form-progress-bar">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+
+          <!-- Form Container -->
+          <div class="form-container">
+            <!-- Single Wizard Form -->
+            <form id="survey-form">
+              
+              <!-- Step 1: Email & OTP -->
+              <div class="form-step active">
+                <!-- Email Step -->
+                <div id="email-step">
+                  <div class="form-title pb-4">
+                    <h4 class="text-center" data-translate="footmail">Enter your email to start</h4>
+                  </div>
+                  <div class="form-group">
+                    <input type="email" name="email" id="email" class="form-control" required>
+                  </div>
+                  <div class="d-flex justify-content-center mt-5">
+                    <button type="button" class="button2" id="continue-btn" data-translate="next">Next</button>
+                  </div>
+                </div>
+                <!-- OTP Step (initially hidden) -->
+                <div id="otp-step" style="display: none;">
+                  <div class="form-title">
+                    <h4 class="text-center" data-translate="verification">Enter your verification code</h4>
+                    <h6 data-translate="spam">Check your spam folder too</h6>
+                  </div>
+                  <div class="form-group">
+                    <div class="container height-100 d-flex justify-content-center align-items-center">
+                      <div class="position-relative">
+                        <div class="p-2 text-center">
+                          <div id="otp" class="inputs d-flex flex-row justify-content-center mt-2">
+                            <input class="m-2 text-center form-control rounded" type="text" id="first" maxlength="1" />
+                            <input class="m-2 text-center form-control rounded" type="text" id="second" maxlength="1" />
+                            <input class="m-2 text-center form-control rounded" type="text" id="third" maxlength="1" />
+                            <input class="m-2 text-center form-control rounded" type="text" id="fourth" maxlength="1" />
+                          </div>
+                          <div id="otp-resend-container" style="display: inline-flex; align-items: center;">
+                            <span id="timer-display" style="font-size: 1.2em;">01:00</span>
+                            <a href="#" id="resend-link" style="margin-left: 10px; pointer-events: none; color: grey; text-decoration: none;">Resend</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- OTP Next Button moves to the next overall step -->
+                  <div class="row mt-4">
+                    <div class="col-md-12">
+                      <div class="d-flex justify-content-center">
+                        <button type="button" class="button2 next-step" data-translate="verify">Verify</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Step 2: Personal Information -->
+              <div class="form-step">
+                <div class="form-title">
+                  <h4 class="mb-4" data-translate="personalInfo">Personal Information</h4>
+                </div>
+                <div class="form-group">
+                  <label data-translate="fullName" for="full_name">Full Name: </label> <span class="mandatory">*</span>
+                  <input type="text" name="text" id="full_name" placeholder="(As it should appear on your badge)" data-placeholder="enterFullName1" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label data-translate="ageGroup" for="age_group">Age Group:</label> <span class="mandatory">*</span>
+                  <select class="form-control" id="age_group">
+                    <option style="display: none;" data-translate="select"> </option>
+                    <option data-translate="pragechild">18-23</option>
+                    <option data-translate="prageadult">24 - 29</option>
+                    <option data-translate="prageadmiddle">30 - 39</option>
+                    <option data-translate="prageultramiddle">40 - 49</option>
+                    <option data-translate="pragecityzen">50 - 59</option>
+                  </select>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label data-translate="emailAddress" for="personal_email">Email Address:</label> <span class="mandatory">*</span>
+                      <input type="text" name="email" id="personal_email" data-placeholder="email1" placeholder="(For official communication)" class="form-control" required>
+                    </div>
+                  </div>
+                
+                
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label data-translate="phoneNumber" for="mobile_code">Phone Number:</label> <span class="mandatory">*</span>
+                    <input type="hidden" value="+966" name="country_code" id="country_code" />
+                    <input type="hidden" value="sa" name="country_initial" id="country_initial" />
+                    <input type="text" name="mobile" placeholder="" data-placeholder="enterMobile" id="mobile_code" class="form-control phone-form" onkeypress="return /[0-9]/i.test(event.key)" required>
+                    <span class="error mobile_error" style="color: red"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label data-translate="employmentStatus" for="age_group">Employment Status: (Select 1) </label> <span class="mandatory">*</span>
+                <select class="form-control" id="age_group">
+                  <option style="display: none;" data-translate="select"> </option>
+                  <option data-translate="unemployed">Unemployed</option>
+                  <option data-translate="Employed">Employed</option>
+                  <option data-translate="freelance">Freelance</option>
+                  <option data-translate="sudent">Student</option>
+                </select>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label data-translate="Nationality" for="age_group">Nationality:</label>  <span class="mandatory">*</span>
+                    <select class="form-control" id="age_group">
+                      <option style="display: none;" data-translate="select"> </option>
+                      <option value="SA" data-translate="saudi">Saudi Arabia</option>
+                      <option value="AE" data-translate="uae">United Arab Emirates</option>
+                      <option value="KW" data-translate="kuwait">Kuwait</option>
+                      <option value="QA" data-translate="qatar">Qatar</option>
+                      <option value="OM" data-translate="oman">Oman</option>
+                      <option value="BH" data-translate="bahrain">Bahrain</option>
+                      
+                      <!-- Arab Countries -->
+                      <option value="EG" data-translate="egypt">Egypt</option>
+                      <option value="JO" data-translate="jordan">Jordan</option>
+                      <option value="LB" data-translate="lebanon">Lebanon</option>
+                      <option value="IQ" data-translate="iraq">Iraq</option>
+                      <option value="YE" data-translate="yemen">Yemen</option>
+                      <option value="MA" data-translate="morocco">Morocco</option>
+                      <option value="TN" data-translate="tunisia">Tunisia</option>
+                      
+                      <!-- Asian Countries -->
+                      <option value="IN" data-translate="india">India</option>
+                      <option value="PK" data-translate="pakistan">Pakistan</option>
+                      <option value="CN" data-translate="china">China</option>
+                      <option value="JP" data-translate="japan">Japan</option>
+                      <option value="KR" data-translate="skorea">South Korea</option>
+                      
+                      <!-- Western Countries -->
+                      <option value="US" data-translate="usa">United States</option>
+                      <option value="UK" data-translate="uk">United Kingdom</option>
+                      <option value="CA" data-translate="canada">Canada</option>
+                      <option value="AU" data-translate="australia">Australia</option>
+                      <option value="FR" data-translate="france">France</option>
+                      <option value="DE" data-translate="germany">Germany</option>
+                      <option value="IT" data-translate="italy">Italy</option>
+                      <option value="ES" data-translate="spain">Spain</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label data-translate="placeResidence" for="personal_email">
+                      Place of Residence: </label> <span class="mandatory">*</span>
+                    <input type="text" name="email" id="personal_email" data-placeholder="email1" class="form-control" required>
+                  </div>
+                </div>
+              </div>
+
+                <!-- Image Upload -->
+                <div class="form-group">
+                  <div class="image-upload-container">
+                    <label data-translate="pleaseUploadImage" for="profile-pic">Please Upload Profile Image:</label> <span class="mandatory">*</span>
+                    <input type="file" class="form-control" id="profile-pic" accept="image/*">
+                    <span data-translate="imgtext">For badge printing, please upload an image with a white background that clearly shows your head and shoulders</span>
+                    <button class="btn btn-outline-secondary" id="upload-btn">Choose Image</button>
+                    
+                  </div>
+                </div>
+                
+                <div class="btn-align">
+                  <button type="button" class="button2 next-step" data-translate="next">Next</button>
+                </div>
+              </div>
+
+              <!-- Step 3: Personal Information -->
+              <div class="form-step">
+                <div class="form-title">
+                  <h4 class="mb-4" data-translate="professionalInfo">Professional Information</h4>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label data-translate="roleFilm" for="film_role">Role In the Film Industry</label> <span class="mandatory">*</span>
+                      <select class="form-control" id="film_role">
+                        <option style="display: none;" data-translate="select"></option>
+                        <option value="filmmaker" data-translate="filmmaker">Filmmaker</option>
+                        <option value="writer" data-translate="writer">Writer</option>
+                        <option value="producer" data-translate="producer">Producer</option>
+                        <option value="director" data-translate="director">Director</option>
+                        <option value="crewMember" data-translate="crewMember">Crew Member (e.g., Cinematographer, Editor, etc.)</option>
+                        <option value="other" data-translate="otherRole">Other (Please specify)</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label data-translate="Ifother" for="other_role">If other:</label> <span class="mandatory">*</span>
+                      <input type="text" name="text" id="full_name" placeholder="(Please specify)" data-placeholder="pleaseSpecify" class="form-control" required>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label data-translate="afli" for="company_affiliation">Company/ Affiliation:</label><span class="mandatory">*</span>
+                  <input type="text" name="text" id="company_affiliation" data-placeholder="ifapplicable" placeholder="If applicable" class="form-control">
+                </div>
+
+
+                <div class="form-group">
+                  <label data-translate="portfolio" for="portfolio">Project Portfolio/Filmography:</label><span class="mandatory">*</span>
+                  <p class="Portfolio-hint" data-translate="portfolioHint">(Please provide a link to a sample of your work)</p>
+                  <textarea class="form-control" name="portfolio" id="portfolio"></textarea>
+                </div>
+
+                
+                
+                
+
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label data-translate="emailAddress" for="personal_email">Email Address:</label> <span class="mandatory">*</span>
+                      <input type="text" name="email" id="personal_email" data-placeholder="email1" placeholder="(For official communication)" class="form-control" required>
+                    </div>
+                  </div>
+                
+                
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label data-translate="phoneNumber" for="mobile_code">Phone Number:</label> <span class="mandatory">*</span>
+                    <input type="hidden" value="+966" name="country_code" id="country_code" />
+                    <input type="hidden" value="sa" name="country_initial" id="country_initial" />
+                    <input type="text" name="mobile" placeholder="" data-placeholder="enterMobile" id="mobile_code" class="form-control phone-form" onkeypress="return /[0-9]/i.test(event.key)" required>
+                    <span class="error mobile_error" style="color: red"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label data-translate="employmentStatus" for="age_group">Employment Status: (Select 1) </label> <span class="mandatory">*</span>
+                <select class="form-control" id="age_group">
+                  <option style="display: none;" data-translate="select"> </option>
+                  <option data-translate="unemployed">Unemployed</option>
+                  <option data-translate="Employed">Employed</option>
+                  <option data-translate="freelance">Freelance</option>
+                  <option data-translate="sudent">Student</option>
+                </select>
+              </div>
+
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label data-translate="Nationality" for="age_group">Nationality:</label>  <span class="mandatory">*</span>
+                    <select class="form-control" id="age_group">
+                      <option style="display: none;" data-translate="select"> </option>
+                      <option value="SA" data-translate="saudi">Saudi Arabia</option>
+                      <option value="AE" data-translate="uae">United Arab Emirates</option>
+                      <option value="KW" data-translate="kuwait">Kuwait</option>
+                      <option value="QA" data-translate="qatar">Qatar</option>
+                      <option value="OM" data-translate="oman">Oman</option>
+                      <option value="BH" data-translate="bahrain">Bahrain</option>
+                      
+                      <!-- Arab Countries -->
+                      <option value="EG" data-translate="egypt">Egypt</option>
+                      <option value="JO" data-translate="jordan">Jordan</option>
+                      <option value="LB" data-translate="lebanon">Lebanon</option>
+                      <option value="IQ" data-translate="iraq">Iraq</option>
+                      <option value="YE" data-translate="yemen">Yemen</option>
+                      <option value="MA" data-translate="morocco">Morocco</option>
+                      <option value="TN" data-translate="tunisia">Tunisia</option>
+                      
+                      <!-- Asian Countries -->
+                      <option value="IN" data-translate="india">India</option>
+                      <option value="PK" data-translate="pakistan">Pakistan</option>
+                      <option value="CN" data-translate="china">China</option>
+                      <option value="JP" data-translate="japan">Japan</option>
+                      <option value="KR" data-translate="skorea">South Korea</option>
+                      
+                      <!-- Western Countries -->
+                      <option value="US" data-translate="usa">United States</option>
+                      <option value="UK" data-translate="uk">United Kingdom</option>
+                      <option value="CA" data-translate="canada">Canada</option>
+                      <option value="AU" data-translate="australia">Australia</option>
+                      <option value="FR" data-translate="france">France</option>
+                      <option value="DE" data-translate="germany">Germany</option>
+                      <option value="IT" data-translate="italy">Italy</option>
+                      <option value="ES" data-translate="spain">Spain</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label data-translate="placeResidence" for="personal_email">
+                      Place of Residence: </label> <span class="mandatory">*</span>
+                    <input type="text" name="email" id="personal_email" data-placeholder="email1" class="form-control" required>
+                  </div>
+                </div>
+              </div>
+
+                <!-- Image Upload -->
+                <div class="form-group">
+                  <div class="image-upload-container">
+                    <label data-translate="pleaseUploadImage" for="profile-pic">Please Upload Profile Image:</label> <span class="mandatory">*</span>
+                    <input type="file" class="form-control" id="profile-pic" accept="image/*">
+                    <span data-translate="imgtext">For badge printing, please upload an image with a white background that clearly shows your head and shoulders</span>
+                    <button class="btn btn-outline-secondary" id="upload-btn">Choose Image</button>
+                    <div class="image-preview-container">
+                      <img id="image-preview" class="image-preview img-thumbnail" style="display:none; max-width:200px;" alt="Preview">
+                    </div>
+                    <div class="upload-success mt-2 text-success" id="upload-success" style="display:none;">
+                      <i class="fas fa-check-circle"></i> Image uploaded successfully
+                    </div>
+                    <button class="btn btn-danger mt-2" id="remove-btn" style="display:none;">Remove Image</button>
+                  </div>
+                </div>
+                
+                <div class="btn-align">
+                  <button type="button" class="button2 next-step" data-translate="next">Next</button>
+                </div>
+              </div>
+
+              <!-- Step 4: Accreditation Details -->
+              <div class="form-step">
+                <div class="form-title">
+                  <h4 class="mb-4" data-translate="Accreditationdetails">Accreditation Details</h4>
+                </div>
+                <div class="form-group">
+                  <label data-translate="previousyears" for="attended_festival">Have you attended the Saudi Film Festival in previous years?</label>
+                  <select class="form-control" id="attended_festival">
+                    <option style="display: none;" data-translate="select">Select </option>
+                    <option value="Yes" data-translate="yes">Yes</option>
+                    <option value="No" data-translate="no">No</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label data-translate="whichyears" for="festival_years">If Yes: (Please specify which years)</label>
+                  <input type="text" name="text" id="festival_years" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label data-translate="afli" for="company_affiliation">Company/ Affiliation:</label>
+                  <input type="text" name="text" id="company_affiliation" data-placeholder="ifapplicable" placeholder="If applicable" class="form-control">
+                </div>
+                <!-- Areas of Interest Checkboxes -->
+                <div class="aria-check-section">
+                  <h6 data-translate="checktitle">Select your areas of interest: (Check all that apply)</h6>
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="aria-check-box">
+                        <input type="checkbox" id="films_in_competition" name="interest_films" value="Films in Competition">
+                        <label for="films_in_competition" data-translate="filmsinCompetition">Films in Competition</label>
+                      </div>
+                      <div class="aria-check-box">
+                        <input type="checkbox" id="japanese_film" name="interest_japanese" value="Japanese Film Screenings">
+                        <label for="japanese_film" data-translate="japaneseFilmScreenings">Japanese Film Screenings</label>
+                      </div>
+                      <div class="aria-check-box">
+                        <input type="checkbox" id="cinema_identity_screenings" name="interest_cinema" value="Cinema of Identity Screenings">
+                        <label for="cinema_identity_screenings" data-translate="cinemaofIdentityScreenings">Cinema of Identity Screenings</label>
+                      </div>
+                     
+                    </div>
+                    <div class="col-sm-12">
+                      <div class="aria-check-box">
+                        <input type="checkbox" id="red_carpet" name="interest_red_carpet" value="Red Carpet">
+                        <label for="red_carpet" data-translate="redCarpet">Red Carpet (Meet &amp; Greet Opportunities)</label>
+                      </div>
+                      <div class="aria-check-box">
+                        <input type="checkbox" id="immersive_interactive" name="interest_immersive" value="Immersive/Interactive Experiences">
+                        <label for="immersive_interactive" data-translate="immersiveInteractiveExperiences">Immersive/Interactive Experiences</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="btn-align">
+                  <button type="button" class="button2 prev-step" data-translate="back">Back</button>
+                  <button type="button" class="button2 next-step" data-translate="next">Next</button>
+                </div>
+              </div>
+
+              <!-- Step 5: Acknowledgment Step -->
+              <div class="form-step">
+                <div class="form-title">
+                  <h4 data-translate="acknowledgment">Acknowledgment</h4>
+                </div>
+                <div class="form-group">
+                  <p data-translate="acknowledgmentPara">
+                    By submitting this form, I confirm that the information provided is accurate and agree to follow the festival’s code of conduct.
+                  </p>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="acknowledgment" required>
+                    <label class="form-check-label" for="acknowledgment" data-translate="agree">Agree</label>
+                  </div>
+                </div>
+                <div class="btn-align">
+                  <button type="button" class="button2 prev-step" data-translate="back">Back</button>
+                  <button type="button" class="button2 next-step" data-translate="review">Review</button>
+                </div>
+              </div>
+
+              <!-- Step 6: Preview -->
+              <div class="form-step">
+                <div class="all-info-header">
+                  <img src="assets/images/ticket-icon.png" alt="">
+                  <h4></h4>
+                </div>
+                <div class="all-info-cont-head">
+                  <h5 data-translate="personalInfo">Personal Information</h5>
+                </div>
+                <div class="all-info-content">
+                  <ul class="p-0">
+                    <li data-translate="fullName2">Full Name:</li>
+                    <li class="info-data" id="preview_full_name"></li>
+                  </ul>
+                  <ul class="p-0">
+                    <li data-translate="ageGroup2">Age Group:</li>
+                    <li class="info-data" id="preview_age_group"></li>
+                  </ul>
+                  <ul class="p-0">
+                    <li data-translate="emailAddress2">Email Address:</li>
+                    <li class="info-data" id="preview_email"></li>
+                  </ul>
+                  <ul class="p-0">
+                    <li data-translate="phoneNumber2">Phone Number:</li>
+                    <li class="info-data" id="preview_phone"></li>
+                  </ul>
+                  <ul class="p-0">
+                    <li data-translate="insertImage2">Insert Image:</li>
+                    <li class="info-data">
+                      <img id="preview_image" src="" alt="Preview Image" style="max-width:200px;">
+                    </li>
+                  </ul>
+                  <ul class="p-0">
+                    <li data-translate="haveyouattended">Have you attended the Saudi Film Festival in previous years?</li>
+                    <li class="info-data" id="preview_attended"></li>
+                  </ul>
+                  <ul class="p-0">
+                    <li data-translate="ifyes">If yes: (Please specify which years)</li>
+                    <li class="info-data" id="preview_festival_years"></li>
+                  </ul>
+                </div>
+                <div class="all-info-cont-head">
+                  <h5 data-translate="afli">Company/Affiliation</h5>
+                </div>
+                <div class="all-info-content">
+                  <ul class="p-0">
+                    <li data-translate="filmsinCompetition">Films in Competition</li>
+                    <li class="info-data" id="preview_films_in_competition"></li>
+                  </ul>
+                  <ul class="p-0">
+                    <li data-translate="japaneseFilmScreenings">Japanese Film Screenings</li>
+                    <li class="info-data" id="preview_japanese_film"></li>
+                  </ul>
+                  <ul class="p-0">
+                    <li data-translate="cinemaofIdentityScreenings">Cinema of Identity Screenings</li>
+                    <li class="info-data" id="preview_cinema_identity_screenings"></li>
+                  </ul>
+                  <ul class="p-0">
+                    <li data-translate="redCarpet">Red Carpet (Meet &amp; Greet Opportunities)</li>
+                    <li class="info-data" id="preview_red_carpet"></li>
+                  </ul>
+                  <ul class="p-0">
+                    <li data-translate="immersiveInteractiveExperiences">Immersive/Interactive Experiences</li>
+                    <li class="info-data" id="preview_immersive_interactive"></li>
+                  </ul>
+                  <ul class="p-0">
+                    <li data-translate="afli">Company/Affiliation</li>
+                    <li class="info-data" id="preview_company"></li>
+                  </ul>
+                  <ul class="p-0">
+                    <li data-translate="acknowledgment">Acknowledgment:</li>
+                    <li class="info-data" id="preview_acknowledgment"></li>
+                  </ul>
+                </div>
+                
+                <div class="btn-align">
+                  <button type="button" class="button2 prev-step" data-translate="back">Back</button>
+                  <button type="button" class="button2 next-step" data-translate="submit">Submit</button>
+                </div>
+              </div>
+
+              <!-- Step 7: Thank You -->
+              <div class="form-step">
+                <div class="thank-you-section text-center">
+                  <h3 style="font-weight: bold; color: green;" data-translate="thankyou">
+                    <i class="fas fa-check-circle"></i> Thank You
+                  </h3>
+                  <p style="color: black;">for your registration</p>
+                </div>
+              </div>
+
+            </form>
+            <!-- End Wizard Form -->
+          </div>
+          
+          <!-- Ticket Name Section -->
+          <div class="ticket-name">
+            <h3 data-translate="productionMarket">Production Market Pass</h3>
+          </div>
+
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <section class="footer-main-sec w-100 float-left">
+    <div class="container">
+      <div class="footer-inner-sec pos-rel">
+        <div class="footer-social-sec footer-text">
+          <div>
+            <span class="text-white d-inline-block" data-translate="copyright">
+              © 2025 Saudi Arabian Oil Co. King Abdulaziz Center for World Culture
+            </span>
+          </div>
+          <div class="text-white foot-link">
+            <a target="_blank" href="https://www.ithra.com/en/terms-conditions">
+              <span data-translate="terms">Terms and Conditions</span>
+            </a>
+            <a target="_blank" href="https://www.ithra.com/en/privacy-policy">
+              <span data-translate="privacy">Privacy Policy</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Crop Modal -->
+  <div class="modal fade" id="cropModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Crop Profile Picture</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">x</button>
+            </div>
+            <div class="modal-body">
+                <img id="image-to-crop" src="" alt="Image to crop">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="crop-btn">Crop & Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+  <!-- Scripts -->
+  <script src="assets/form-js/jquery-3.6.0.min.js"></script>
+  <script src="assets/js/ScrollTrigger.min.js"></script>
+  <script src="assets/js/script-1.js"></script>
+  <script src="assets/f/bootstrap.min.js"></script>
+  <script src="assets/form-js/bootstrap.bundle.min.js"></script>
+  <script src="https://kit.fontawesome.com/49ccdaea81.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput-jquery.min.js"></script>
+  <script src="https://unpkg.com/vue@2.7.13/dist/vue.min.js"></script>
+  <script src="https://unpkg.com/vue-select@2.6.4/dist/vue-select.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+  <!-- Translation and Language Switch Script -->
+  <script>
+    // Translations object with acknowledgment keys included
+    const translations = {
+      en: {
+        personalInfo: "Personal Information",
+        fullName: "Full Name: ",
+        ageGroup: "Age Group:",
+        emailAddress: "Email Address:",
+        phoneNumber: "Phone Number:",
+        footmail: "Enter your email to start",
+        verification: "Enter your verification code",
+        spam: "Check your spam folder too",
+        incertimg: "Insert Image:",
+        production2: "7 Day Screening Pass",
+        productionMarket: "Production Market Pass",
+        Accreditationdetails: "Accreditation Details",
+        previousyears: "Have you attended the Saudi Film Festival in previous years?",
+        whichyears: "If Yes: (Please specify which years)",
+        ifapplicable: "If applicable",
+        checktitle: "Select your areas of interest: (Check all that apply)",
+        fullName2: "Full Name:",
+        ageGroup2: "Age Group:",
+        emailAddress2: "Email Address:",
+        phoneNumber2: "Phone Number:",
+        insertImage2: "Insert Image:",
+        haveyouattended: "Have you attended the Saudi Film Festival in previous years?",
+        ifyes: "If yes: (Please specify which years)",
+        filmsinCompetition: "Films in Competition",
+        japaneseFilmScreenings: "Japanese Film Screenings",
+        cinemaofIdentityScreenings: "Cinema of Identity Screenings",
+        redCarpet: "Red Carpet (Meet & Greet Opportunities)",
+        immersiveInteractiveExperiences: "Immersive/Interactive Experiences",
+        terms: "Terms and Conditions",
+        privacy: "Privacy Policy",
+        acknowledgment: "Acknowledgment",
+        acknowledgmentPara: "By submitting this form, I confirm that the information provided is accurate and agree to follow the festival’s code of conduct.",
+        agree: "I Agree",
+        next: "Next",
+        review: "Review",
+        back: "Back",
+        submit: "Submit",
+        verify: "Verify",
+        imgtext: "For badge printing, please upload an image with a white background that clearly shows your head and shoulders",
+        enterFullName1: "(As it shoudl appear on your badge)",
+        email1: "(For official communication)",
+        afli: "Company/ Affiliation",
+        thankyou: "Thank You",
+        copyright:"© 2025 Saudi Arabian Oil Co. King Abdulaziz Center for World Culture",
+        pragechild:"18 - 23",
+        prageadult:"24 - 29",
+        prageadmiddle:"30 - 39",
+        prageultramiddle:"40 - 49",
+        pragecityzen:"50 - 59",
+        employmentStatus:"Employment Status: (Select 1)",
+        unemployed:"Unemployed",
+        Employed:"Employed",
+        freelance:"Freelance",
+        sudent:"Student",
+        Nationality:"Nationality",
+        placeResidence:"Place of Residence: ",
+        pleaseUploadImage:"Please Upload Profile Image: ",
+        roleFilm: "Role In the Film Industry",
+        filmmaker: "Filmmaker",
+        writer: "Writer", 
+        producer: "Producer",
+        director: "Director",
+        crewMember: "Crew Member (e.g., Cinematographer, Editor, etc.)",
+        otherRole: "Other (Please specify)",
+        professionalInfo: "Professional Information",
+         Ifother: "If other:",
+        pleaseSpecify: "(Please specify)",
+            portfolio: "Project Portfolio/Filmography:",
+        portfolioHint: "(Please provide a link to a sample of your work)"
+      },
+
+      ar: {
+        personalInfo: "المعلومات الشخصية",
+        fullName: "الاسم الكامل: ",
+        ageGroup: "الفئة العمرية: ",
+        emailAddress: "البريد الإلكتروني: ",
+        phoneNumber: "رقم الهاتف: ",
+        footmail: "أدخل بريدك الإلكتروني للبدء",
+        verification: "أدخل رمز التحقق",
+        spam: "تأكد من مجلد البريد المهمل",
+        incertimg: "أرفق صورة: ",
+        production2: "بطاقة دخول عروض الأفلام لمدة 7 أيام",
+        productionMarket: "بطاقة دخول سوق الانتاج",
+        Accreditationdetails: "تفاصيل الاعتماد",
+        previousyears: "هل قمت بحضور مهرجان أفلام السعودية في الأعوام السابقة؟",
+        whichyears: "في حال إختيار نعم (الرجاء تحديد العام)",
+        ifapplicable: "(إن وجد)",
+        checktitle: "حدد مجالات الاهتمام (اختر جميع ما يلائم):",
+        fullName2: "الاسم الكامل:",
+        ageGroup2: "الفئة العمرية",
+        emailAddress2: "البريد الإلكتروني:",
+        phoneNumber2: "رقم الهاتف:",
+        insertImage2: "أرفق صورة",
+        haveyouattended: "هل قمت بحضور مهرجان أفلام السعودية في الأعوام السابقة؟",
+        ifyes: "في حال إختيار نعم (الرجاء تحديد العام)",
+        filmsinCompetition: "الأفلام المشاركة في مسابقات الأفلام",
+        japaneseFilmScreenings: "عروض الأفلام اليابانية",
+        cinemaofIdentityScreenings: "عروض سينما الهوية",
+        redCarpet: "السجادة الحمراء (فرص للقاء والتعارف)",
+        immersiveInteractiveExperiences: "تجارب غامرة/تفاعلية",
+        terms: "الشروط و الأحكام",
+        privacy: "سياسة الخصوصية",
+        acknowledgment: "إقرار",
+        acknowledgmentPara: "بتقديم هذا الطلب، أقر بأن المعلومات المقدمة صحيحة وأوافق على اتباع قواعد سلوك المهرجان.",
+        agree: "أوافق",
+        next: "التالي",
+        back: "العودة",
+        submit: "إرسال",
+        review: "مراجعة",
+        verify: "إرسال",
+        imgtext: "لطباعة الشارة بشكل صحيح، تأكد من رفع صورتك بخلفية بيضاء تظهر فيها ملامح الوجه والكتفين",
+        enterFullName1: "(كما يجب أن يظهر على شارتك)",
+        email1: "(للتواصل الرسمي)",
+        afli: "الشركة/الانتساب",
+        thankyou: "شكراً",
+        copyright:"© 2025 مركز الملك عبدالعزيز الثقافي العالمي، شركة الزيت العربية السعودية",
+        pragechild:"18 - 23 سنة",
+        prageadult:"24 - 29 سنة",
+        prageadmiddle:"30 - 39 سنة",
+        prageultramiddle:"40 - 49 سنة",
+        pragecityzen:"50 - 59 سنة",
+        employmentStatus:"الحالة الوظيفية:",
+        unemployed:"غير موظف",
+        Employed:"موظف",
+        freelance:"عمل حر",
+        sudent:"طالب",
+        Nationality:"الجنسية:",
+        placeResidence:"مكان الإقامة: ",
+        pleaseUploadImage:"أرفق صورة ",
+        roleFilm: "دورك في مجال صناعة الأفلام",
+        filmmaker: "صانع أفلام",
+        writer: "كاتب",
+        producer: "منتج",
+        director: "مخرج",
+        crewMember: "عضو طاقم (مصور سينمائي، محرر، مهندسة إضاءة، مهندس صوت... إلخ)",
+        otherRole: "غير ذلك (يرجى التحديد)",
+        professionalInfo: "المعلومات المهنية",
+        Ifother: "إذا كان غير ذلك:",
+        pleaseSpecify: "(يرجى التحديد)",
+            portfolio: "ملف المشاريع/الفيلموغرافيا",
+    portfolioHint: "(الرجاء وضع رابط لنموذج عن أعمالك)"
+      }
+    };
+
+    // Language switch function accepting event and language code
+    function switchLanguage(event, lang) {
+      event.preventDefault();
+      document.querySelectorAll('.switch a').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.currentTarget.classList.add('active');
+      document.body.style.direction = lang === 'ar' ? 'rtl' : 'ltr';
+      const elements = document.querySelectorAll('[data-translate]');
+      elements.forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (translations[lang] && translations[lang][key]) {
+          element.textContent = translations[lang][key];
+        }
+      });
+      const inputs = document.querySelectorAll('[data-placeholder]');
+      inputs.forEach(input => {
+        const key = input.getAttribute('data-placeholder');
+        if (translations[lang] && translations[lang][key]) {
+          input.placeholder = translations[lang][key];
+        }
+      });
+    }
+  </script>
+
+  <!-- Email to OTP Handler -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('continue-btn').addEventListener('click', function () {
+        const email = document.getElementById('email').value.trim();
+        if (email) {
+          // Hide email section and show OTP section
+          document.getElementById('email-step').style.display = 'none';
+          document.getElementById('otp-step').style.display = 'block';
+        } else {
+          alert('Please enter a valid email.');
+        }
+      });
+    });
+  </script>
+
+  <!-- Wizard Step Navigation -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const steps = document.querySelectorAll(".form-step");
+      const nextBtns = document.querySelectorAll(".next-step");
+      const prevBtns = document.querySelectorAll(".prev-step");
+      const progressSpans = document.querySelectorAll(".form-progress-bar span");
+  
+      let currentStep = 0;
+  
+      function showStep(index) {
+        steps.forEach((step, i) => {
+          step.classList.toggle("active", i === index);
+          if (progressSpans[i]) {
+            if (i <= index) {
+              progressSpans[i].classList.add("bar-color");
+            } else {
+              progressSpans[i].classList.remove("bar-color");
+            }
+          }
+        });
+      }
+  
+      nextBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          if (currentStep < steps.length - 1) {
+            currentStep++;
+            // When moving to the preview step (assumed to be step 5), update preview data.
+            if (currentStep === 4) {
+              updatePreview();
+            }
+            showStep(currentStep);
+          }
+        });
+      });
+  
+      prevBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          if (currentStep > 0) {
+            currentStep--;
+            showStep(currentStep);
+          }
+        });
+      });
+  
+      showStep(currentStep);
+    });
+  </script>
+
+  <!-- Preview Update Script -->
+  <script>
+    function updatePreview() {
+      // Existing preview updates...
+      const fullName = document.getElementById('full_name').value;
+      const ageGroup = document.getElementById('age_group').value;
+      const personalEmail = document.getElementById('personal_email').value;
+      const phoneNumber = document.getElementById('mobile_code').value;
+      const imageSrc = document.getElementById('image-preview').src;
+
+      document.getElementById('preview_full_name').textContent = fullName;
+      document.getElementById('preview_age_group').textContent = ageGroup;
+      document.getElementById('preview_email').textContent = personalEmail;
+      document.getElementById('preview_phone').textContent = phoneNumber;
+      document.getElementById('preview_image').src = imageSrc ? imageSrc : 'assets/images/admin-detail3.png';
+
+      const attendedFestival = document.getElementById('attended_festival').value;
+      const festivalYears = document.getElementById('festival_years').value;
+      const companyAffiliation = document.getElementById('company_affiliation').value;
+
+      document.getElementById('preview_attended').textContent = attendedFestival;
+      document.getElementById('preview_festival_years').textContent = festivalYears ? festivalYears : '-----';
+      document.getElementById('preview_company').textContent = companyAffiliation;
+
+      document.getElementById('preview_films_in_competition').textContent = document.getElementById('films_in_competition').checked ? 'Yes' : 'No';
+      document.getElementById('preview_cinema_identity_screenings').textContent = document.getElementById('cinema_identity_screenings').checked ? 'Yes' : 'No';
+      document.getElementById('preview_immersive_interactive').textContent = document.getElementById('immersive_interactive').checked ? 'Yes' : 'No';
+      document.getElementById('preview_japanese_film').textContent = document.getElementById('japanese_film').checked ? 'Yes' : 'No';
+      document.getElementById('preview_red_carpet').textContent = document.getElementById('red_carpet').checked ? 'Yes' : 'No';
+
+      // New code for acknowledgment preview:
+      // This reads whether the checkbox is checked and displays "Agreed" if it is, and "Not Agreed" if it's not.
+      const acknowledgmentChecked = document.getElementById('acknowledgment').checked;
+      document.getElementById('preview_acknowledgment').textContent = acknowledgmentChecked ? 'Agreed' : 'Not Agreed';
+    }
+  </script>
+
+  <!-- Image Upload & Cropper Script -->
+  <script>
+    let cropper;
+    document.getElementById('upload-btn').addEventListener('click', () => {
+        document.getElementById('profile-pic').click();
+    });
+    
+    document.getElementById('profile-pic').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const image = document.getElementById('image-to-crop');
+                image.src = event.target.result;
+                const cropModal = new bootstrap.Modal(document.getElementById('cropModal'));
+                cropModal.show();
+                
+                if (cropper) cropper.destroy();
+                
+                cropper = new Cropper(image, {
+                    aspectRatio: 1,
+                    viewMode: 2,
+                    dragMode: 'move',
+                    autoCropArea: 0.65,
+                    restore: false,
+                    guides: true,
+                    center: true,
+                    highlight: false,
+                    cropBoxMovable: true,
+                    cropBoxResizable: true,
+                    toggleDragModeOnDblclick: false,
+                    minContainerWidth: 300,
+                    minContainerHeight: 300,
+                    minCropBoxWidth: 150,
+                    minCropBoxHeight: 150,
+                    ready: function() {
+                        this.cropper.setCropBoxData({
+                            width: 200,
+                            height: 200
+                        });
+                    }
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    document.getElementById('crop-btn').addEventListener('click', () => {
+        if (!cropper) return;
+        
+        const canvas = cropper.getCroppedCanvas({
+            width: 150, // Reduced from 200
+            height: 150, // Reduced from 200
+            fillColor: '#fff',
+            imageSmoothingEnabled: true,
+            imageSmoothingQuality: 'high'
+        });
+        
+        const preview = document.getElementById('image-preview');
+        preview.src = canvas.toDataURL('image/jpeg', 0.8); // Added compression
+        preview.style.display = 'block';
+        preview.style.width = '150px'; // Fixed preview size
+        preview.style.height = '150px'; // Fixed preview size
+        preview.style.objectFit = 'cover'; // Ensures image covers the area
+        
+        document.getElementById('upload-success').style.display = 'block';
+        document.getElementById('remove-btn').style.display = 'inline-block';
+        document.getElementById('upload-btn').style.display = 'none';
+        
+        bootstrap.Modal.getInstance(document.getElementById('cropModal')).hide();
+        cropper.destroy();
+    });
+    </script>
+
+  <!-- International Telephone Input Script -->
+  <script>
+    $('#mobile_code').intlTelInput({
+      initialCountry: 'sa',
+      separateDialCode: true,
+    });
+    $('#mobile_code').on('countrychange', function () {
+      const countryInput = $('#mobile_code');
+      const countryData = countryInput.intlTelInput('getSelectedCountryData');
+      $('#country_code').val(`+${countryData.dialCode}`);
+      $('#country_initial').val(countryData.iso2.toLowerCase());
+    });
+  </script>
+
+  <!-- WOW.js Initialization -->
+  <script>
+    new WOW().init();
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const otpInputs = document.querySelectorAll('#otp input');
+   
+      otpInputs.forEach((input, index) => {
+        // Input Event: Advance automatically when a digit is typed.
+        input.addEventListener('input', function () {
+          if (this.value.length === this.maxLength) {
+            if (index < otpInputs.length - 1) {
+              otpInputs[index + 1].focus();
+            }
+          }
+        });
+   
+        // Keydown Event: If Backspace is hit and the current input is empty, focus the previous input.
+        input.addEventListener('keydown', function (e) {
+          if (e.key === 'Backspace' && this.value === '' && index > 0) {
+            otpInputs[index - 1].focus();
+          }
+        });
+   
+        // Paste Event: Distribute pasted characters across all OTP fields.
+        input.addEventListener('paste', function(e) {
+          e.preventDefault();
+          const pastedData = e.clipboardData.getData('text');
+          // Split the pasted data into an array of characters.
+          const values = pastedData.split('');
+          // Fill each OTP input with the corresponding character.
+          otpInputs.forEach((otpInput, idx) => {
+            otpInput.value = values[idx] || '';
+          });
+          // Focus the last filled input (or the last input if more characters than needed are pasted)
+          const lastIndex = Math.min(values.length, otpInputs.length) - 1;
+          if (lastIndex >= 0) {
+            otpInputs[lastIndex].focus();
+          }
+        });
+      });
+    });
+    </script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        let timer = 60;
+        const timerDisplay = document.getElementById('timer-display');
+        const resendLink = document.getElementById('resend-link');
+       
+        // Update the countdown every second
+        const countdownInterval = setInterval(function() {
+          const minutes = Math.floor(timer / 60);
+          const seconds = timer % 60;
+          timerDisplay.textContent = 
+            (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+       
+          if (timer <= 0) {
+            clearInterval(countdownInterval);
+            timerDisplay.textContent = "00:00";
+            // Activate the resend link: set color to red and allow clicking
+            resendLink.style.pointerEvents = "auto";
+            resendLink.style.color = "red";
+          }
+          timer--;
+        }, 1000);
+      });
+      </script>
+
+
+<!-- acknowledgment valdation -->
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+      // Get the acknowledgment checkbox and next button
+      const acknowledgmentCheckbox = document.getElementById('acknowledgment');
+      const acknowledgmentStep = acknowledgmentCheckbox.closest('.form-step');
+      const nextButton = acknowledgmentStep.querySelector('.next-step');
+      const errorDiv = document.createElement('div');
+      
+      // Style the error message
+      errorDiv.style.color = '#dc3545';
+      errorDiv.style.fontSize = '14px';
+      errorDiv.style.marginTop = '10px';
+      errorDiv.style.display = 'none';
+  
+      // Add error message div after the checkbox
+      acknowledgmentCheckbox.closest('.form-check').appendChild(errorDiv);
+  
+      // Initially disable the next button
+      nextButton.disabled = true;
+      
+      // Add validation on checkbox change
+      acknowledgmentCheckbox.addEventListener('change', function() {
+          if (this.checked) {
+              nextButton.disabled = false;
+              errorDiv.style.display = 'none';
+              nextButton.classList.remove('disabled');
+              // Add success styling to checkbox
+              this.closest('.form-check').classList.add('is-valid');
+              this.closest('.form-check').classList.remove('is-invalid');
+          } else {
+              nextButton.disabled = true;
+              errorDiv.textContent = 'Please acknowledge the terms to proceed';
+              errorDiv.style.display = 'block';
+              nextButton.classList.add('disabled');
+              // Add error styling to checkbox
+              this.closest('.form-check').classList.add('is-invalid');
+              this.closest('.form-check').classList.remove('is-valid');
+          }
+      });
+  
+      // Add validation when clicking next button
+      nextButton.addEventListener('click', function(e) {
+          if (!acknowledgmentCheckbox.checked) {
+              e.preventDefault();
+              errorDiv.textContent = 'Please acknowledge the terms to proceed';
+              errorDiv.style.display = 'block';
+              acknowledgmentCheckbox.closest('.form-check').classList.add('is-invalid');
+              // Shake animation for error feedback
+              nextButton.classList.add('shake');
+              setTimeout(() => {
+                  nextButton.classList.remove('shake');
+              }, 500);
+          }
+      });
+  });
+  </script>
+  
+</body>
+</html>
