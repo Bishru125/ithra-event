@@ -1339,6 +1339,168 @@
       imagePreview.src = '';
       originalImage = null;
   }
+
+  // Add touch event handlers
+cropBox.addEventListener('touchstart', handleTouchStart, false);
+document.addEventListener('touchmove', handleTouchMove, false);
+document.addEventListener('touchend', handleTouchEnd, false);
+
+// Touch variables
+let lastTouchX = 0;
+let lastTouchY = 0;
+let initialTouchDistance = 0;
+
+function handleTouchStart(e) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    
+    isDragging = true;
+    startX = touch.clientX;
+    startY = touch.clientY;
+    lastTouchX = touch.clientX;
+    lastTouchY = touch.clientY;
+    startLeft = cropBox.offsetLeft;
+    startTop = cropBox.offsetTop;
+    
+    // Handle pinch to resize
+    if (e.touches.length === 2) {
+        isResizing = true;
+        const touch2 = e.touches[1];
+        initialTouchDistance = Math.hypot(
+            touch2.clientX - touch.clientX,
+            touch2.clientY - touch.clientY
+        );
+        startWidth = cropBox.offsetWidth;
+        startHeight = cropBox.offsetHeight;
+    }
+}
+
+function handleTouchMove(e) {
+    if (!isDragging && !isResizing) return;
+    e.preventDefault();
+    
+    const imgRect = imagePreview.getBoundingClientRect();
+    const touch = e.touches[0];
+    
+    if (e.touches.length === 1 && isDragging) {
+        // Single touch - drag
+        const deltaX = touch.clientX - lastTouchX;
+        const deltaY = touch.clientY - lastTouchY;
+        
+        let newLeft = cropBox.offsetLeft + deltaX;
+        let newTop = cropBox.offsetTop + deltaY;
+        
+        // Constrain within image boundaries
+        newLeft = Math.max(0, Math.min(newLeft, imgRect.width - cropBox.offsetWidth));
+        newTop = Math.max(0, Math.min(newTop, imgRect.height - cropBox.offsetHeight));
+        
+        cropBox.style.left = newLeft + 'px';
+        cropBox.style.top = newTop + 'px';
+        
+        lastTouchX = touch.clientX;
+        lastTouchY = touch.clientY;
+    } else if (e.touches.length === 2 && isResizing) {
+        // Two touches - pinch to resize
+        const touch2 = e.touches[1];
+        const currentDistance = Math.hypot(
+            touch2.clientX - touch.clientX,
+            touch2.clientY - touch.clientY
+        );
+        
+        const scale = currentDistance / initialTouchDistance;
+        
+        let newWidth = Math.max(30, startWidth * scale);
+        let newHeight = Math.max(30, startHeight * scale);
+        
+        // Maintain aspect ratio 300:375
+        const aspectRatio = 300/375;
+        newHeight = newWidth / aspectRatio;
+        
+        // Constrain within image boundaries
+        newWidth = Math.min(newWidth, imgRect.width - cropBox.offsetLeft);
+        newHeight = Math.min(newHeight, imgRect.height - cropBox.offsetTop);
+        
+        cropBox.style.width = newWidth + 'px';
+        cropBox.style.height = newHeight + 'px';
+    }
+}
+
+function handleTouchEnd(e) {
+    isDragging = false;
+    isResizing = false;
+    activeHandle = null;
+}
+
+// Update initCropBox function to set initial aspect ratio
+function initCropBox() {
+    const imgWidth = imagePreview.offsetWidth;
+    const imgHeight = imagePreview.offsetHeight;
+    
+    // Set crop box with 300:375 aspect ratio
+    const aspectRatio = 300/375;
+    let cropWidth = imgWidth * 0.8;
+    let cropHeight = cropWidth / aspectRatio;
+    
+    // Adjust if height exceeds image
+    if (cropHeight > imgHeight * 0.8) {
+        cropHeight = imgHeight * 0.8;
+        cropWidth = cropHeight * aspectRatio;
+    }
+    
+    const cropLeft = (imgWidth - cropWidth) / 2;
+    const cropTop = (imgHeight - cropHeight) / 2;
+    
+    cropBox.style.width = cropWidth + 'px';
+    cropBox.style.height = cropHeight + 'px';
+    cropBox.style.left = cropLeft + 'px';
+    cropBox.style.top = cropTop + 'px';
+}
+
+// Add mobile-friendly CSS
+const style = document.createElement('style');
+style.textContent = `
+    .crop-handle {
+        width: 30px;
+        height: 30px;
+        background: rgba(255,255,255,0.5);
+        border: 2px solid #fff;
+        border-radius: 50%;
+        position: absolute;
+        touch-action: none;
+    }
+    
+    #cropBox {
+        touch-action: none;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+    
+    .image-workspace {
+        max-width: 100%;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    #imagePreview {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    @media (max-width: 768px) {
+        .crop-handle {
+            width: 40px;
+            height: 40px;
+        }
+        
+        #cropButton,
+        #saveButton,
+        #newImageButton {
+            padding: 12px 24px;
+            font-size: 16px;
+        }
+    }
+`;
+document.head.appendChild(style);
 </script>
   
 </body>
