@@ -1636,6 +1636,7 @@ input[type="file"]::file-selector-button {
     display: none;
     text-align: center;
     margin: 20px 0px;
+    gap: 10px !important;
 }
 
 .upload-section{

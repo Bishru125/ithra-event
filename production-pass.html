@@ -223,7 +223,7 @@
               </div>
 
                 <!-- Image Upload -->
-                <div class="form-group">
+                <!-- <div class="form-group">
                   <div class="image-upload-container">
                     <label data-translate="pleaseUploadImage" for="profile-pic">Please Upload Profile Image:</label> <span class="mandatory">*</span>
                     <input type="file" class="form-control" id="profile-pic" accept="image/*">
@@ -231,7 +231,7 @@
                     <button class="btn btn-outline-secondary" id="upload-btn">Choose Image</button>
                     
                   </div>
-                </div>
+                </div> -->
 
 
 
@@ -239,10 +239,13 @@
 
                 <!-- new -->
 
-                <div class="upload-section" id="uploadSection">
-                  <input type="file" id="imageUpload" accept="image/*">
-              </div>
-              <span data-translate="imgtext">For badge printing, please upload an image with a white background that clearly shows your head and shoulders</span>
+                <div class="form-group">
+                  <label data-translate="pleaseUploadImage" for="profile-pic">Please Upload Profile Image:</label> <span class="mandatory">*</span>
+                  <div class="upload-section" id="uploadSection">
+                    <input type="file" id="imageUpload" accept="image/*">
+                </div>
+                <span data-translate="imgtext">For badge printing, please upload an image with a white background that clearly shows your head and shoulders</span>
+                </div>
               
               <div class="image-workspace" id="imageWorkspace">
                   <img id="imagePreview" alt="Preview">
