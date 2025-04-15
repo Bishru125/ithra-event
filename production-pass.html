@@ -258,14 +258,14 @@
               </div>
               
               <div id="buttonGroup">
-                  <button id="cropButton">Crop Image</button>
+                  <button id="cropButton" style="display: none;">Crop Image</button>
               </div>
               
               <div class="save-button-container" id="saveButtonContainer">
                   <a id="downloadLink" download="cropped-image.png">
                       <button id="saveButton">Save Image</button>
                   </a>
-                  <button  id="newImageButton" style="margin-left: 10px; background-color: #6c757d;">Upload New Image</button>
+                  <button id="newImageButton">Upload New Image</button>
               </div>
 
 
@@ -1093,260 +1093,295 @@
 
 <script>
   // DOM Elements
-  const uploadSection = document.getElementById('uploadSection');
-  const imageUpload = document.getElementById('imageUpload');
-  const imageWorkspace = document.getElementById('imageWorkspace');
-  const imagePreview = document.getElementById('imagePreview');
-  const cropBox = document.getElementById('cropBox');
-  const cropButton = document.getElementById('cropButton');
-  const saveButtonContainer = document.getElementById('saveButtonContainer');
-  const downloadLink = document.getElementById('downloadLink');
-  const newImageButton = document.getElementById('newImageButton');
-  
-  // Variables for image data
-  let originalImage = null;
-  
-  // Variables for drag and resize functionality
-  let isDragging = false;
-  let isResizing = false;
-  let activeHandle = null;
-  let startX, startY, startLeft, startTop, startWidth, startHeight;
-  
-  // Event Listeners
-  imageUpload.addEventListener('change', handleImageUpload);
-  cropButton.addEventListener('click', cropImage);
-  newImageButton.addEventListener('click', resetToUpload);
-  
-  // Crop box interaction events
-  cropBox.addEventListener('mousedown', startDragOrResize);
-  document.addEventListener('mousemove', moveOrResize);
-  document.addEventListener('mouseup', stopDragOrResize);
-  
-  // Set up resize handle events
-  const handles = cropBox.querySelectorAll('.crop-handle');
-  handles.forEach(handle => {
-      handle.addEventListener('mousedown', function(e) {
-          e.stopPropagation(); // Prevent dragging event on the crop box
-          isResizing = true;
-          activeHandle = this;
-          
-          startX = e.clientX;
-          startY = e.clientY;
-          startWidth = cropBox.offsetWidth;
-          startHeight = cropBox.offsetHeight;
-          startLeft = cropBox.offsetLeft;
-          startTop = cropBox.offsetTop;
-      });
-  });
-  
-  // Functions
-  function handleImageUpload(e) {
-      const file = e.target.files[0];
-      if (!file || !file.type.startsWith('image/')) return;
-      
-      const reader = new FileReader();
-      reader.onload = function(event) {
-          // Create image to get natural dimensions
-          originalImage = new Image();
-          originalImage.onload = function() {
-              // Show the image workspace
-              imagePreview.src = event.target.result;
-              imageWorkspace.style.display = 'block';
-              
-              // Show crop button
-              cropButton.style.display = 'block';
-              
-              // Hide save button if previously shown
-              saveButtonContainer.style.display = 'none';
-              
-              // Setup initial crop area
-              setTimeout(initCropBox, 100);
-          };
-          originalImage.src = event.target.result;
-      };
-      reader.readAsDataURL(file);
-  }
-  
-  function initCropBox() {
-      const imgWidth = imagePreview.offsetWidth;
-      const imgHeight = imagePreview.offsetHeight;
-      
-      // Default crop area - 80% of image size, centered
-      const cropWidth = imgWidth * 0.8;
-      const cropHeight = imgHeight * 0.8;
-      const cropLeft = (imgWidth - cropWidth) / 2;
-      const cropTop = (imgHeight - cropHeight) / 2;
-      
-      cropBox.style.width = cropWidth + 'px';
-      cropBox.style.height = cropHeight + 'px';
-      cropBox.style.left = cropLeft + 'px';
-      cropBox.style.top = cropTop + 'px';
-  }
-  
-  function startDragOrResize(e) {
-      if (isResizing) return;
-      
-      isDragging = true;
-      startX = e.clientX;
-      startY = e.clientY;
-      startLeft = cropBox.offsetLeft;
-      startTop = cropBox.offsetTop;
-  }
-  
-  function moveOrResize(e) {
-      if (!isDragging && !isResizing) return;
-      
-      const imgRect = imagePreview.getBoundingClientRect();
-      
-      if (isDragging) {
-          // Calculate new position
-          let newLeft = startLeft + (e.clientX - startX);
-          let newTop = startTop + (e.clientY - startY);
-          
-          // Constrain within image boundaries
-          newLeft = Math.max(0, Math.min(newLeft, imgRect.width - cropBox.offsetWidth));
-          newTop = Math.max(0, Math.min(newTop, imgRect.height - cropBox.offsetHeight));
-          
-          // Update position
-          cropBox.style.left = newLeft + 'px';
-          cropBox.style.top = newTop + 'px';
-      } else if (isResizing) {
-          // Different resize calculations based on which handle is active
-          let newWidth, newHeight, newLeft, newTop;
-          
-          if (activeHandle.classList.contains('handle-br')) {
-              // Bottom-right handle
-              newWidth = startWidth + (e.clientX - startX);
-              newHeight = startHeight + (e.clientY - startY);
-              newLeft = startLeft;
-              newTop = startTop;
-          } else if (activeHandle.classList.contains('handle-bl')) {
-              // Bottom-left handle
-              newWidth = startWidth - (e.clientX - startX);
-              newHeight = startHeight + (e.clientY - startY);
-              newLeft = startLeft + (e.clientX - startX);
-              newTop = startTop;
-          } else if (activeHandle.classList.contains('handle-tr')) {
-              // Top-right handle
-              newWidth = startWidth + (e.clientX - startX);
-              newHeight = startHeight - (e.clientY - startY);
-              newLeft = startLeft;
-              newTop = startTop + (e.clientY - startY);
-          } else if (activeHandle.classList.contains('handle-tl')) {
-              // Top-left handle
-              newWidth = startWidth - (e.clientX - startX);
-              newHeight = startHeight - (e.clientY - startY);
-              newLeft = startLeft + (e.clientX - startX);
-              newTop = startTop + (e.clientY - startY);
-          }
-          
-          // Ensure minimum size (30x30 pixels)
-          newWidth = Math.max(30, newWidth);
-          newHeight = Math.max(30, newHeight);
-          
-          // Constrain within image boundaries
-          if (newLeft < 0) {
-              newWidth += newLeft;
-              newLeft = 0;
-          }
-          
-          if (newTop < 0) {
-              newHeight += newTop;
-              newTop = 0;
-          }
-          
-          if (newLeft + newWidth > imgRect.width) {
-              newWidth = imgRect.width - newLeft;
-          }
-          
-          if (newTop + newHeight > imgRect.height) {
-              newHeight = imgRect.height - newTop;
-          }
-          
-          // Update crop box dimensions and position
-          cropBox.style.width = newWidth + 'px';
-          cropBox.style.height = newHeight + 'px';
-          cropBox.style.left = newLeft + 'px';
-          cropBox.style.top = newTop + 'px';
-      }
-  }
-  
-  function stopDragOrResize() {
-      isDragging = false;
-      isResizing = false;
-      activeHandle = null;
-  }
-  
-  function cropImage() {
-      // Create canvas for cropping
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-      
-      // Calculate scaling factor between displayed image and original
-      const displayedWidth = imagePreview.offsetWidth;
-      const displayedHeight = imagePreview.offsetHeight;
-      const scaleX = originalImage.naturalWidth / displayedWidth;
-      const scaleY = originalImage.naturalHeight / displayedHeight;
-      
-      // Get crop dimensions
-      const cropLeft = parseFloat(cropBox.style.left) || 0;
-      const cropTop = parseFloat(cropBox.style.top) || 0;
-      const cropBoxWidth = cropBox.offsetWidth;
-      const cropBoxHeight = cropBox.offsetHeight;
-      
-      // Calculate cropped dimensions in original image coordinates
-      const realCropX = cropLeft * scaleX;
-      const realCropY = cropTop * scaleY;
-      const realCropWidth = cropBoxWidth * scaleX;
-      const realCropHeight = cropBoxHeight * scaleY;
-      
-      // Set canvas to the cropped size
-      canvas.width = realCropWidth;
-      canvas.height = realCropHeight;
-      
-      // Draw only the cropped portion to the canvas
-      ctx.drawImage(
-          originalImage,
-          realCropX, realCropY, realCropWidth, realCropHeight,
-          0, 0, realCropWidth, realCropHeight
-      );
-      
-      // Convert to data URL and set download link
-      const croppedImageData = canvas.toDataURL('image/png');
-      downloadLink.href = croppedImageData;
-      
-      // Hide the image workspace and crop button
-      imageWorkspace.style.display = 'none';
-      cropButton.style.display = 'none';
-      
-      // Show just the save button
-      saveButtonContainer.style.display = 'block';
-  }
-  
-  function resetToUpload() {
-      // Reset UI state to initial
-      imageWorkspace.style.display = 'none';
-      cropButton.style.display = 'none';
-      saveButtonContainer.style.display = 'none';
-      
-      // Reset image upload input
-      imageUpload.value = '';
-      
-      // Reset crop box properties
-      cropBox.style.width = '0px';
-      cropBox.style.height = '0px';
-      cropBox.style.left = '0px';
-      cropBox.style.top = '0px';
-      
-      // Clear image references and src
-      imagePreview.src = '';
-      originalImage = null;
-  }
+const uploadSection = document.getElementById('uploadSection');
+const imageUpload = document.getElementById('imageUpload');
+const imageWorkspace = document.getElementById('imageWorkspace');
+const imagePreview = document.getElementById('imagePreview');
+const cropBox = document.getElementById('cropBox');
+const cropButton = document.getElementById('cropButton');
+const downloadLink = document.getElementById('downloadLink');
+const newImageButton = document.getElementById('newImageButton');
 
-  // Add touch event handlers
-cropBox.addEventListener('touchstart', handleTouchStart, false);
-document.addEventListener('touchmove', handleTouchMove, false);
-document.addEventListener('touchend', handleTouchEnd, false);
+// Variables for image data
+let originalImage = null;
+
+// Variables for drag and resize functionality
+let isDragging = false;
+let isResizing = false;
+let activeHandle = null;
+let startX, startY, startLeft, startTop, startWidth, startHeight;
+
+// Event Listeners
+imageUpload.addEventListener('change', handleImageUpload);
+cropButton.addEventListener('click', cropImage);
+newImageButton.addEventListener('click', resetToUpload);
+
+// Crop box interaction events
+cropBox.addEventListener('mousedown', startDragOrResize);
+document.addEventListener('mousemove', moveOrResize);
+document.addEventListener('mouseup', stopDragOrResize);
+
+// Set up resize handle events
+const handles = cropBox.querySelectorAll('.crop-handle');
+handles.forEach(handle => {
+    handle.addEventListener('mousedown', function(e) {
+        e.stopPropagation(); // Prevent dragging event on the crop box
+        isResizing = true;
+        activeHandle = this;
+        
+        startX = e.clientX;
+        startY = e.clientY;
+        startWidth = cropBox.offsetWidth;
+        startHeight = cropBox.offsetHeight;
+        startLeft = cropBox.offsetLeft;
+        startTop = cropBox.offsetTop;
+    });
+    
+    // Add touch events for handles specifically
+    handle.addEventListener('touchstart', function(e) {
+        e.stopPropagation(); // Prevent dragging event on the crop box
+        e.preventDefault();
+        isResizing = true;
+        activeHandle = this;
+        
+        const touch = e.touches[0];
+        startX = touch.clientX;
+        startY = touch.clientY;
+        startWidth = cropBox.offsetWidth;
+        startHeight = cropBox.offsetHeight;
+        startLeft = cropBox.offsetLeft;
+        startTop = cropBox.offsetTop;
+    }, { passive: false });
+});
+
+// Functions
+function handleImageUpload(e) {
+    const file = e.target.files[0];
+    if (!file || !file.type.startsWith('image/')) return;
+    
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        // Create image to get natural dimensions
+        originalImage = new Image();
+        originalImage.onload = function() {
+            // Show the image workspace
+            imagePreview.src = event.target.result;
+            imageWorkspace.style.display = 'block';
+            
+            // Show crop button
+            cropButton.style.display = 'block';
+            
+            // Setup initial crop area
+            setTimeout(initCropBox, 100);
+        };
+        originalImage.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+function initCropBox() {
+    const imgWidth = imagePreview.offsetWidth;
+    const imgHeight = imagePreview.offsetHeight;
+    
+    // Set crop box with 300:375 aspect ratio (4:5)
+    const aspectRatio = 300/375; // This is actually 4:5
+    let cropWidth = imgWidth * 0.8;
+    let cropHeight = cropWidth / aspectRatio;
+    
+    // Adjust if height exceeds image
+    if (cropHeight > imgHeight * 0.8) {
+        cropHeight = imgHeight * 0.8;
+        cropWidth = cropHeight * aspectRatio;
+    }
+    
+    const cropLeft = (imgWidth - cropWidth) / 2;
+    const cropTop = (imgHeight - cropHeight) / 2;
+    
+    cropBox.style.width = cropWidth + 'px';
+    cropBox.style.height = cropHeight + 'px';
+    cropBox.style.left = cropLeft + 'px';
+    cropBox.style.top = cropTop + 'px';
+}
+
+function startDragOrResize(e) {
+    if (isResizing) return;
+    
+    isDragging = true;
+    startX = e.clientX;
+    startY = e.clientY;
+    startLeft = cropBox.offsetLeft;
+    startTop = cropBox.offsetTop;
+}
+
+function moveOrResize(e) {
+    if (!isDragging && !isResizing) return;
+    
+    const imgRect = imagePreview.getBoundingClientRect();
+    const aspectRatio = startWidth / startHeight; // Maintain original aspect ratio
+    
+    if (isDragging) {
+        // Calculate new position
+        let newLeft = startLeft + (e.clientX - startX);
+        let newTop = startTop + (e.clientY - startY);
+        
+        // Constrain within image boundaries
+        newLeft = Math.max(0, Math.min(newLeft, imgRect.width - cropBox.offsetWidth));
+        newTop = Math.max(0, Math.min(newTop, imgRect.height - cropBox.offsetHeight));
+        
+        // Update position
+        cropBox.style.left = newLeft + 'px';
+        cropBox.style.top = newTop + 'px';
+    } else if (isResizing) {
+        // Different resize calculations based on which handle is active
+        let newWidth, newHeight, newLeft, newTop;
+        
+        // Calculate the distance moved
+        const deltaX = e.clientX - startX;
+        const deltaY = e.clientY - startY;
+        
+        // Calculate the primary dimension change based on which handle is being used
+        let primaryDimChange;
+        
+        if (activeHandle.classList.contains('handle-br')) {
+            // Bottom-right handle - use the larger of deltaX or deltaY * aspectRatio
+            primaryDimChange = Math.max(deltaX, deltaY * aspectRatio);
+            newWidth = startWidth + primaryDimChange;
+            newHeight = newWidth / aspectRatio;
+            newLeft = startLeft;
+            newTop = startTop;
+        } else if (activeHandle.classList.contains('handle-bl')) {
+            // Bottom-left handle
+            primaryDimChange = Math.max(-deltaX, deltaY * aspectRatio);
+            newWidth = startWidth + primaryDimChange;
+            newHeight = newWidth / aspectRatio;
+            newLeft = startLeft - primaryDimChange;
+            newTop = startTop;
+        } else if (activeHandle.classList.contains('handle-tr')) {
+            // Top-right handle
+            primaryDimChange = Math.max(deltaX, -deltaY * aspectRatio);
+            newWidth = startWidth + primaryDimChange;
+            newHeight = newWidth / aspectRatio;
+            newLeft = startLeft;
+            newTop = startTop + startHeight - newHeight;
+        } else if (activeHandle.classList.contains('handle-tl')) {
+            // Top-left handle
+            primaryDimChange = Math.max(-deltaX, -deltaY * aspectRatio);
+            newWidth = startWidth + primaryDimChange;
+            newHeight = newWidth / aspectRatio;
+            newLeft = startLeft - primaryDimChange;
+            newTop = startTop + startHeight - newHeight;
+        }
+        
+        // Ensure minimum size (30x30 pixels)
+        newWidth = Math.max(60, newWidth);
+        newHeight = newWidth / aspectRatio;
+        
+        // Constrain within image boundaries
+        if (newLeft < 0) {
+            const diff = -newLeft;
+            newLeft = 0;
+            newWidth -= diff;
+            newHeight = newWidth / aspectRatio;
+        }
+        
+        if (newTop < 0) {
+            const diff = -newTop;
+            newTop = 0;
+            newHeight -= diff;
+            newWidth = newHeight * aspectRatio;
+        }
+        
+        if (newLeft + newWidth > imgRect.width) {
+            newWidth = imgRect.width - newLeft;
+            newHeight = newWidth / aspectRatio;
+        }
+        
+        if (newTop + newHeight > imgRect.height) {
+            newHeight = imgRect.height - newTop;
+            newWidth = newHeight * aspectRatio;
+        }
+        
+        // Update crop box dimensions and position
+        cropBox.style.width = newWidth + 'px';
+        cropBox.style.height = newHeight + 'px';
+        cropBox.style.left = newLeft + 'px';
+        cropBox.style.top = newTop + 'px';
+    }
+}
+
+function stopDragOrResize() {
+    isDragging = false;
+    isResizing = false;
+    activeHandle = null;
+}
+
+function cropImage() {
+    // Create canvas for cropping
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Calculate scaling factor between displayed image and original
+    const displayedWidth = imagePreview.offsetWidth;
+    const displayedHeight = imagePreview.offsetHeight;
+    const scaleX = originalImage.naturalWidth / displayedWidth;
+    const scaleY = originalImage.naturalHeight / displayedHeight;
+    
+    // Get crop dimensions
+    const cropLeft = parseFloat(cropBox.style.left) || 0;
+    const cropTop = parseFloat(cropBox.style.top) || 0;
+    const cropBoxWidth = cropBox.offsetWidth;
+    const cropBoxHeight = cropBox.offsetHeight;
+    
+    // Calculate cropped dimensions in original image coordinates
+    const realCropX = cropLeft * scaleX;
+    const realCropY = cropTop * scaleY;
+    const realCropWidth = cropBoxWidth * scaleX;
+    const realCropHeight = cropBoxHeight * scaleY;
+    
+    // Set canvas to the cropped size
+    canvas.width = realCropWidth;
+    canvas.height = realCropHeight;
+    
+    // Draw only the cropped portion to the canvas
+    ctx.drawImage(
+        originalImage,
+        realCropX, realCropY, realCropWidth, realCropHeight,
+        0, 0, realCropWidth, realCropHeight
+    );
+    
+    // Convert to data URL and set download link
+    const croppedImageData = canvas.toDataURL('image/png');
+    downloadLink.href = croppedImageData;
+    document.getElementById("croppedImageData").value = croppedImageData;
+    
+    // Hide the image workspace and crop button
+    imageWorkspace.style.display = 'none';
+    cropButton.style.display = 'none';
+}
+
+function resetToUpload() {
+    // Reset UI state to initial
+    imageWorkspace.style.display = 'none';
+    cropButton.style.display = 'none';
+    
+    // Reset image upload input
+    imageUpload.value = '';
+    
+    // Reset crop box properties
+    cropBox.style.width = '0px';
+    cropBox.style.height = '0px';
+    cropBox.style.left = '0px';
+    cropBox.style.top = '0px';
+    
+    // Clear image references and src
+    imagePreview.src = '';
+    originalImage = null;
+}
+
+// Touch event handlers for crop box
+cropBox.addEventListener('touchstart', handleTouchStart, { passive: false });
+document.addEventListener('touchmove', handleTouchMove, { passive: false });
+document.addEventListener('touchend', handleTouchEnd, { passive: false });
 
 // Touch variables
 let lastTouchX = 0;
@@ -1354,6 +1389,8 @@ let lastTouchY = 0;
 let initialTouchDistance = 0;
 
 function handleTouchStart(e) {
+    if (isResizing) return; // Don't handle crop box touch if we're already resizing via handle
+    
     e.preventDefault();
     const touch = e.touches[0];
     
@@ -1364,17 +1401,18 @@ function handleTouchStart(e) {
     lastTouchY = touch.clientY;
     startLeft = cropBox.offsetLeft;
     startTop = cropBox.offsetTop;
+    startWidth = cropBox.offsetWidth;
+    startHeight = cropBox.offsetHeight;
     
     // Handle pinch to resize
     if (e.touches.length === 2) {
         isResizing = true;
+        isDragging = false;
         const touch2 = e.touches[1];
         initialTouchDistance = Math.hypot(
             touch2.clientX - touch.clientX,
             touch2.clientY - touch.clientY
         );
-        startWidth = cropBox.offsetWidth;
-        startHeight = cropBox.offsetHeight;
     }
 }
 
@@ -1383,6 +1421,89 @@ function handleTouchMove(e) {
     e.preventDefault();
     
     const imgRect = imagePreview.getBoundingClientRect();
+    const aspectRatio = startWidth / startHeight; // Maintain original aspect ratio
+    
+    // Handle when a resize handle is being touched
+    if (activeHandle) {
+        const touch = e.touches[0];
+        
+        // Calculate the distance moved
+        const deltaX = touch.clientX - startX;
+        const deltaY = touch.clientY - startY;
+        
+        // Calculate the primary dimension change based on which handle is being used
+        let primaryDimChange;
+        let newWidth, newHeight, newLeft, newTop;
+        
+        if (activeHandle.classList.contains('handle-br')) {
+            // Bottom-right handle - use larger dimension change
+            primaryDimChange = Math.max(deltaX, deltaY * aspectRatio);
+            newWidth = startWidth + primaryDimChange;
+            newHeight = newWidth / aspectRatio;
+            newLeft = startLeft;
+            newTop = startTop;
+        } else if (activeHandle.classList.contains('handle-bl')) {
+            // Bottom-left handle
+            primaryDimChange = Math.max(-deltaX, deltaY * aspectRatio);
+            newWidth = startWidth + primaryDimChange;
+            newHeight = newWidth / aspectRatio;
+            newLeft = startLeft - primaryDimChange;
+            newTop = startTop;
+        } else if (activeHandle.classList.contains('handle-tr')) {
+            // Top-right handle
+            primaryDimChange = Math.max(deltaX, -deltaY * aspectRatio);
+            newWidth = startWidth + primaryDimChange;
+            newHeight = newWidth / aspectRatio;
+            newLeft = startLeft;
+            newTop = startTop + startHeight - newHeight;
+        } else if (activeHandle.classList.contains('handle-tl')) {
+            // Top-left handle
+            primaryDimChange = Math.max(-deltaX, -deltaY * aspectRatio);
+            newWidth = startWidth + primaryDimChange;
+            newHeight = newWidth / aspectRatio;
+            newLeft = startLeft - primaryDimChange;
+            newTop = startTop + startHeight - newHeight;
+        }
+        
+        // Ensure minimum size (60x75 pixels for the 4:5 ratio)
+        newWidth = Math.max(60, newWidth);
+        newHeight = newWidth / aspectRatio;
+        
+        // Constrain within image boundaries
+        if (newLeft < 0) {
+            const diff = -newLeft;
+            newLeft = 0;
+            newWidth -= diff;
+            newHeight = newWidth / aspectRatio;
+        }
+        
+        if (newTop < 0) {
+            const diff = -newTop;
+            newTop = 0;
+            newHeight -= diff;
+            newWidth = newHeight * aspectRatio;
+        }
+        
+        if (newLeft + newWidth > imgRect.width) {
+            newWidth = imgRect.width - newLeft;
+            newHeight = newWidth / aspectRatio;
+        }
+        
+        if (newTop + newHeight > imgRect.height) {
+            newHeight = imgRect.height - newTop;
+            newWidth = newHeight * aspectRatio;
+        }
+        
+        // Update crop box dimensions and position
+        cropBox.style.width = newWidth + 'px';
+        cropBox.style.height = newHeight + 'px';
+        cropBox.style.left = newLeft + 'px';
+        cropBox.style.top = newTop + 'px';
+        
+        return;
+    }
+    
+    // Normal drag or pinch handling
     const touch = e.touches[0];
     
     if (e.touches.length === 1 && isDragging) {
@@ -1412,17 +1533,51 @@ function handleTouchMove(e) {
         
         const scale = currentDistance / initialTouchDistance;
         
-        let newWidth = Math.max(30, startWidth * scale);
-        let newHeight = Math.max(30, startHeight * scale);
+        // Calculate center point of the crop box
+        const centerX = startLeft + startWidth / 2;
+        const centerY = startTop + startHeight / 2;
         
-        // Maintain aspect ratio 300:375
+        // Calculate new dimensions while maintaining aspect ratio
+        let newWidth = Math.max(60, startWidth * scale);
+        let newHeight = newWidth / aspectRatio;
+        
+        // Calculate new position (center-based)
+        let newLeft = centerX - (newWidth / 2);
+        let newTop = centerY - (newHeight / 2);
         
         // Constrain within image boundaries
-        newWidth = Math.min(newWidth, imgRect.width - cropBox.offsetLeft);
-        newHeight = Math.min(newHeight, imgRect.height - cropBox.offsetTop);
+        if (newLeft < 0) {
+            newLeft = 0;
+        }
         
+        if (newTop < 0) {
+            newTop = 0;
+        }
+        
+        if (newLeft + newWidth > imgRect.width) {
+            newWidth = imgRect.width - newLeft;
+            newHeight = newWidth / aspectRatio;
+        }
+        
+        if (newTop + newHeight > imgRect.height) {
+            newHeight = imgRect.height - newTop;
+            newWidth = newHeight * aspectRatio;
+        }
+        
+        // Final boundary check
+        if (newLeft + newWidth > imgRect.width) {
+            newLeft = imgRect.width - newWidth;
+        }
+        
+        if (newTop + newHeight > imgRect.height) {
+            newTop = imgRect.height - newHeight;
+        }
+        
+        // Update crop box
         cropBox.style.width = newWidth + 'px';
         cropBox.style.height = newHeight + 'px';
+        cropBox.style.left = newLeft + 'px';
+        cropBox.style.top = newTop + 'px';
     }
 }
 
@@ -1430,31 +1585,6 @@ function handleTouchEnd(e) {
     isDragging = false;
     isResizing = false;
     activeHandle = null;
-}
-
-// Update initCropBox function to set initial aspect ratio
-function initCropBox() {
-    const imgWidth = imagePreview.offsetWidth;
-    const imgHeight = imagePreview.offsetHeight;
-    
-    // Set crop box with 300:375 aspect ratio
-    const aspectRatio = 300/375;
-    let cropWidth = imgWidth * 0.8;
-    let cropHeight = cropWidth / aspectRatio;
-    
-    // Adjust if height exceeds image
-    if (cropHeight > imgHeight * 0.8) {
-        cropHeight = imgHeight * 0.8;
-        cropWidth = cropHeight * aspectRatio;
-    }
-    
-    const cropLeft = (imgWidth - cropWidth) / 2;
-    const cropTop = (imgHeight - cropHeight) / 2;
-    
-    cropBox.style.width = cropWidth + 'px';
-    cropBox.style.height = cropHeight + 'px';
-    cropBox.style.left = cropLeft + 'px';
-    cropBox.style.top = cropTop + 'px';
 }
 
 // Add mobile-friendly CSS
@@ -1468,6 +1598,7 @@ style.textContent = `
         border-radius: 50%;
         position: absolute;
         touch-action: none;
+        z-index: 10;
     }
     
     #cropBox {
@@ -1491,13 +1622,6 @@ style.textContent = `
         .crop-handle {
             width: 40px;
             height: 40px;
-        }
-        
-        #cropButton,
-        #saveButton,
-        #newImageButton {
-            padding: 12px 24px;
-            font-size: 16px;
         }
     }
 `;

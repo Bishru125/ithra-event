@@ -1186,7 +1186,7 @@ input[type="file"]::file-selector-button {
     }
 
     .form-container {
-        padding:30px;
+        padding:15px;
     }
 }
 
@@ -1578,8 +1578,9 @@ input[type="file"]::file-selector-button {
     font-weight: 500;
     border-radius: 10px !important;
     color: rgb(38, 38, 38);
-    background-color: rgb(218, 218, 218);
-    border: none;
+    background-color: rgb(218, 218, 218)!important;
+    border: 1px solid #ebebeb;
+    margin-bottom: 10px;
 }
 
 #saveButton{
@@ -1607,7 +1608,7 @@ input[type="file"]::file-selector-button {
     position: relative;
     overflow: hidden;
     z-index: 1;
-    color: #fff;
+    color: #606060;
     font-weight: 600;
     padding: 0 15px;
     height: 40px;
@@ -1615,8 +1616,9 @@ input[type="file"]::file-selector-button {
     font-size: 16px;
     font-weight: 500;
     border-radius: 10px !important;
-    background-color: rgb(44, 44, 44);
-    border: none;
+    background-color: rgb(213, 213, 213);
+    border: 1px solid #ebebeb;
+    margin-left: 0px !important;
 }
 
 .handle-br {
@@ -1651,4 +1653,19 @@ input[type="file"]::file-selector-button {
     padding: 8px 10px;
     margin-bottom: 5px;
     overflow: hidden;
+}
+
+
+@media only screen and (max-width: 600px) {
+    #cropButton{
+        font-size: 13px;
+    }
+    #newImageButton{
+        /* margin-top: 10px !important; */
+        background: #fff;
+        border: 1px solid #7400FF;
+        border: none;
+        color: rgb(82, 31, 194);
+        font-size: 14px;
+    }
 }
